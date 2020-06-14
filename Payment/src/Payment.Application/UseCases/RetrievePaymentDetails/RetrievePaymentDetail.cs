@@ -17,12 +17,12 @@
             _retrievePaymentOutputPort = retrievePaymentOutputPort ?? throw new ArgumentNullException(nameof(retrievePaymentOutputPort));
         }
 
-        public async Task Excecute(RetrievePaymentInput input)
+        public async Task Execute(RetrievePaymentInput input)
         {
             if (input is null)
                 _retrievePaymentOutputPort.BadRequest("Input is null");
 
-            var paymentDetail = await _paymentRepository.GetPaymentById(input.PaymentId);
+            var paymentDetail = await _paymentRepository.GetPaymentByIdAsync(input.PaymentId);
 
             if (paymentDetail == null)
                 _retrievePaymentOutputPort.NotFound($"Payment with Id {input.PaymentId} does not exist");

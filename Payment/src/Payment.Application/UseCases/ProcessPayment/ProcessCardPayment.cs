@@ -18,7 +18,7 @@
             _paymentOutputPort = paymentOutputPort ?? throw new ArgumentNullException(nameof(paymentOutputPort));
         }
 
-        public async Task Excecute(ProcessPaymentInput input)
+        public async Task Execute(ProcessPaymentInput input)
         {
             if (input is null)
                 _paymentOutputPort.BadRequest("input is null");
@@ -38,7 +38,7 @@
             }
             catch (ValueObjectException ex)
             {
-                _paymentOutputPort.BadRequest(ex.Message);
+                _paymentOutputPort.BadRequest(ex.Details);
             }
         }
 
