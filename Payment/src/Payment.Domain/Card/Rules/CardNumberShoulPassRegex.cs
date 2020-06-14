@@ -7,12 +7,14 @@
 
         internal CardNumberShoulPassRegex(string value)
         {
-            this._value = value;
+            _value = value;
         }
         public string Message => "Card number was not valid";
 
         public bool IsBroken()
         {
+            if (_value is null) return true;
+
             const string RegExForValidation = @"^4[0-9]{12}(?:[0-9]{3})?$";
 
             Regex regex = new Regex(RegExForValidation);

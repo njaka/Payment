@@ -30,10 +30,5 @@
             this.Status = PaymentStatus.Pending;
             this.CreatedOn = DateTime.Now;
         }
-
-        public void UpdateStatus(PaymentStatus paymentStatus)
-        {
-            this.Status = paymentStatus;
-        }
     }
 }

@@ -8,14 +8,16 @@
 
         internal CCVShouldBeFourOrThreeDigit(string value)
         {
-            this._value = value;
+            _value = value;
         }
 
         public string Message => "CCV should be Four or Three digit";
 
         public bool IsBroken()
         {
-            const string RegExForValidation = @"/^[0-9]{3,4}$/";
+            if (_value is null) return true;
+
+            const string RegExForValidation = @"^[0-9]{3,4}$";
 
             Regex regex = new Regex(RegExForValidation);
             Match match = regex.Match(_value);

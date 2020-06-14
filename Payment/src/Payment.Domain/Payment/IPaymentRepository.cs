@@ -25,7 +25,7 @@
         /// </summary>
         /// <param name="paymentId"></param>
         /// <returns></returns>
-        Task<Payment> GetPaymentById(PaymentId paymentId);
+        Task<Payment> GetPaymentByIdAsync(PaymentId paymentId);
 
 
 

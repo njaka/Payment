@@ -5,18 +5,20 @@ namespace Payment.Domain
 
     public class CurrencyShouldEuroOrDollarOrPound : IValidationRule
     {
-        private readonly Currency _value;
+        private readonly string _value;
 
-        internal CurrencyShouldEuroOrDollarOrPound(Currency value)
+        internal CurrencyShouldEuroOrDollarOrPound(string value)
         {
-            this._value = value;
+            _value = value;
         }
 
         public string Message => "Currency was not valid";
 
         public bool IsBroken()
         {
-            return (!(Enum.IsDefined(typeof(Currency), (int)_value)));
+            if (_value is null) return true;
+
+            return (!(Enum.IsDefined(typeof(Currency), _value)));
         }
     }
 }

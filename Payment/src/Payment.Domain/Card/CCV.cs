@@ -10,5 +10,7 @@
 
             _value = value;
         }
+
+        public override string ToString() => _value;
     }
 }
