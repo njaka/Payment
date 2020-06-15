@@ -6,7 +6,6 @@ namespace Payment.Api.Filter
     using Microsoft.AspNetCore.Mvc.Filters;
     using Microsoft.Extensions.Logging;
     using Payment.Domain;
-    using System;
 
     public class HttpExceptionFilter : IExceptionFilter
     {
@@ -27,7 +26,7 @@ namespace Payment.Api.Filter
             if (context == null)
                 return;
 
-            if(context.Exception is ValueObjectException)
+            if (context.Exception is ValueObjectException)
             {
                 var exception = context.Exception as ValueObjectException;
 

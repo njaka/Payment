@@ -31,11 +31,14 @@ namespace Payment.Api
             services.AddControllers();
             services.AddHealthChecks();
             services.AddRouting(o => o.LowercaseUrls = true);
-            services.AddPaymentApplication();
-            services.AddPaymentPresenterV1();
             services.AddApiVersioning(Configuration.GetVersioningConfiguration());
             services.AddSwagger(Configuration.GetSwaggerConfiguration());
             services.AddHttpExceptionFilter();
+
+            services.AddPaymentApplication();
+            services.AddPaymentPresenterV1();
+            services.AddAcquiringBank(Configuration);
+            services.AddAcquiringBankMock(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

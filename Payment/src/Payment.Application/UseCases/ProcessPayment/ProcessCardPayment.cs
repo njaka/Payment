@@ -23,23 +23,16 @@
             if (input is null)
                 _paymentOutputPort.BadRequest("input is null");
 
-            try
-            {
-                var payment = Payment.CreateCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
+            var payment = Payment.CreateCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
 
-                await _paymentRepository.AddAsync(payment).ConfigureAwait(false);
+            await _paymentRepository.AddAsync(payment).ConfigureAwait(false);
 
-                var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
+            var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
 
-                await _paymentRepository.UpdatePaymentStatusAsync(bankResult.PaymentId, bankResult.PaymentStatus).ConfigureAwait(false);
+            await _paymentRepository.UpdatePaymentStatusAsync(bankResult.PaymentId, bankResult.PaymentStatus).ConfigureAwait(false);
 
-                _paymentOutputPort.OK(BuildOutput(bankResult));
+            _paymentOutputPort.OK(BuildOutput(bankResult));
 
-            }
-            catch (ValueObjectException ex)
-            {
-                _paymentOutputPort.BadRequest(ex.Details);
-            }
         }
 
 

@@ -1,10 +1,5 @@
 ﻿namespace Payment.Api
-{ 
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
+{
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Versioning;
     using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +8,11 @@
     using Payment.Api.Configuration.Versioning;
     using Payment.Api.Filter;
     using Swashbuckle.AspNetCore.SwaggerGen;
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
 
 
     public static class ServiceCollectionExtension

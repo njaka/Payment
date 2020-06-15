@@ -19,6 +19,8 @@ namespace Payment.Api
             services.AddScoped<IUseCase<RetrievePaymentInput>, RetrievePaymentDetail>();
             services.AddScoped<IPaymentRepository, PaymentRepository>();
             services.AddScoped<IBankService, BankService>();
+            services.AddScoped<IBankClient, BankClient>();
+            services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
 
             services.AddFluentMediator(
             builder =>

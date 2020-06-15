@@ -12,6 +12,9 @@ namespace Payment.Api.Controllers.V1
     using System;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Payment Controller
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v1.0/[controller]")]
@@ -31,19 +34,29 @@ namespace Payment.Api.Controllers.V1
             _processPaymentPresenter = processPaymentPresenter;
         }
 
+        /// <summary>
+        /// Process payment
+        /// </summary>
+        /// <param name="paymentRequest">payment Request</param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentResponse))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ProcessPayment(PaymentRequest request)
+        public async Task<IActionResult> ProcessPayment(PaymentRequest paymentRequest)
         {
-            var input = BuildPaymentInput(request);
+            var input = BuildPaymentInput(paymentRequest);
             await _mediator.PublishAsync(input);
             return _processPaymentPresenter.ViewModel;
         }
 
 
+        /// <summary>
+        /// Retrieve Payment Detail
+        /// </summary>
+        /// <param name="paymentId">payment Identifier</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{PaymentId}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RetrievePaymentDetailResponse))]

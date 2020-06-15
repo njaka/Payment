@@ -1,5 +1,5 @@
 ﻿namespace Payment.Api
-{ 
+{
     using Microsoft.AspNetCore.Builder;
     using Payment.Api.Configuration;
 
