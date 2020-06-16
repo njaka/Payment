@@ -11,7 +11,7 @@
             _value = value;
         }
 
-        public string Message => "CCV should be Four or Three digit";
+        public string Message => "CVV should be Four or Three digit";
 
         public bool IsBroken()
         {

@@ -17,11 +17,9 @@ namespace Payment.Api.Controllers.V1.RetrievePaymentDetail
             this.ViewModel = new NotFoundObjectResult(message);
         }
 
-        public void OK(Domain.Payment output)
+        public void OK(RetrievePaymentDetailOutput output)
         {
-            var response = new RetrievePaymentDetailResponse(output);
-
-            this.ViewModel = new OkObjectResult(response);
+            this.ViewModel = new OkObjectResult(output);
         }
     }
 }

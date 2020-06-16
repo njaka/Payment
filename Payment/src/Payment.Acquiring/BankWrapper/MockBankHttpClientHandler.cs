@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Payment.Acquiring
 {
-    public class MockHttpMessageHandler : HttpMessageHandler
+    public class MockBankHttpMessageHandler : HttpMessageHandler
     {
         public enum Status { SUCCESSFUL = 1, UNSUCCESSFUL = 2 }
 

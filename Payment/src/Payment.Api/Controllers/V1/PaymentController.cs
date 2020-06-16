@@ -58,8 +58,8 @@ namespace Payment.Api.Controllers.V1
         /// <param name="paymentId">payment Identifier</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{PaymentId}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RetrievePaymentDetailResponse))]
+        [Route("{paymentId}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RetrievePaymentDetailOutput))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -81,7 +81,7 @@ namespace Payment.Api.Controllers.V1
                 Card = new Domain.Card(
                         new CardNumber(request.Card.CardNumber),
                         request.Card.ExpirationDate,
-                        new CCV(request.Card.CCV)),
+                        new CVV(request.Card.CVV)),
 
 
                 Amount = new Money(request.Amount, request.Currency),

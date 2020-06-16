@@ -55,7 +55,7 @@ namespace Payment.Api
             services.Configure<FeaturesModel>(configuration.GetSection("Features"));
 
             services.AddHttpClient(Constants.MOCK_BANK)
-                  .ConfigurePrimaryHttpMessageHandler(() => new MockHttpMessageHandler())
+                  .ConfigurePrimaryHttpMessageHandler(() => new MockBankHttpMessageHandler())
                   .ConfigureHttpClient((sp, options) =>
                   {
                       options.BaseAddress = new Uri("http://mock-bank");

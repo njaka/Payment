@@ -14,12 +14,5 @@ namespace Payment.Infrastructure.DataAccess.InMemory
             Payments = new ConcurrentDictionary<int, PaymentEntity>();
             Cards = new ConcurrentDictionary<int, CardEntity>();
         }
-
-        public InMemoryDatabase(IDictionary<int, PaymentEntity> payments, IDictionary<int, CardEntity> cards)
-        {
-            Payments = payments;
-            Cards = cards;
-        }
-
     }
 }

@@ -18,11 +18,6 @@ namespace Payment.Domain
             return Amount;
         }
 
-        public int GetCurrencyInt()
-        {
-            return (int)Currency;
-        }
-
         public Decimal Amount { get; }
 
         public Currency Currency { get; }

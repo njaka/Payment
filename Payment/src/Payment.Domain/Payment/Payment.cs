@@ -16,7 +16,7 @@
         public DateTime CreatedOn { get; protected set; }
 
 
-        public static Payment CreateCardPayment(Card card, Money amount, string beneficiaryAlias)
+        public static Payment CreateNewCardPayment(Card card, Money amount, string beneficiaryAlias)
         {
             return new Payment(card, amount, beneficiaryAlias);
         }

@@ -10,7 +10,7 @@ namespace Payment.Infrastructure.DataAccess.InMemory
 
         public string CardNumber { get; set; }
 
-        public string CCV { get; set; }
+        public string CVV { get; set; }
 
         public DateTime ExpirationDate { get; set; }
 

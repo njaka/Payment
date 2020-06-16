@@ -7,7 +7,7 @@ using Payment.Application;
 using Payment.Application.Port;
 using Payment.Application.UseCases;
 using Payment.Domain;
-using Payment.Infrastructure;
+using Payment.Infrastructure.DataAccess.InMemory;
 
 namespace Payment.Api
 {
@@ -17,7 +17,7 @@ namespace Payment.Api
         {
             services.AddScoped<IUseCase<ProcessPaymentInput>, ProcessCardPayment>();
             services.AddScoped<IUseCase<RetrievePaymentInput>, RetrievePaymentDetail>();
-            services.AddScoped<IPaymentRepository, PaymentRepository>();
+           
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
@@ -47,5 +47,13 @@ namespace Payment.Api
             return services;
         }
 
+        internal static IServiceCollection AddInMemoryDatabase(this IServiceCollection services)
+        {
+            services.AddScoped<IPaymentWriteRepository, PaymentWriteRepository>();
+            services.AddScoped<IPaymentReadRepository, PaymentReadRepository>();
+            services.AddSingleton<IDatabase, InMemoryDatabase>();
+
+            return services;
+        }
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace Payment.Domain
 {
-    public class CCV : ValueObject
+    public class CVV : ValueObject
     {
         private readonly string _value;
 
-        public CCV(string value)
+        public CVV(string value)
         {
             this.CheckRule(new CCVShouldBeFourOrThreeDigit(value));
 

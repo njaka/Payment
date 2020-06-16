@@ -1,14 +1,21 @@
 ﻿using System;
 
-namespace Payment.Acquiring
+namespace Payment.Application.UseCases
 {
-    public class CardPaymentRequest
+    /// <summary>
+    /// Retrieve Payment Detail Response
+    /// </summary>
+    public class RetrievePaymentDetailOutput
     {
+        /// <summary>
+        /// Payment Identifier
+        /// </summary>
         public Guid PaymentId { get; set; }
+
         /// <summary>
         /// Card
         /// </summary>
-        public Card Card { get; set; }
+        public CardDto Card { get; set; }
 
         /// <summary>
         /// Amount
@@ -24,10 +31,27 @@ namespace Payment.Acquiring
         /// Beneficiary Alias
         /// </summary>
         public string BeneficiaryAlias { get; set; }
+
+        /// <summary>
+        /// Payment Status
+        /// </summary>
+        public byte Status { get; set; }
+
+        /// <summary>
+        /// Payment Date
+        /// </summary>
+        public DateTime PaymentDate { get; set; }
+
     }
 
-    public class Card
+    /// <summary>
+    /// Card
+    /// </summary>
+    public class CardDto
     {
+       /// <summary>
+        /// Card Number
+        /// </summary>
         public string CardNumber { get; set; }
 
         /// <summary>

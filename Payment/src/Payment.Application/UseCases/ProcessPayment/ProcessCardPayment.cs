@@ -5,13 +5,16 @@
     using System;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Process Payment Use Case
+    /// </summary>
     public class ProcessCardPayment : IUseCase<ProcessPaymentInput>
     {
-        private readonly IPaymentRepository _paymentRepository;
+        private readonly IPaymentWriteRepository _paymentRepository;
         private readonly IProcessPaymentOutputPort _paymentOutputPort;
         private readonly IBankService _bankService;
 
-        public ProcessCardPayment(IPaymentRepository paymentRepository, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
+        public ProcessCardPayment(IPaymentWriteRepository paymentRepository, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
         {
             _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
@@ -21,18 +24,21 @@
         public async Task Execute(ProcessPaymentInput input)
         {
             if (input is null)
+            {
                 _paymentOutputPort.BadRequest("input is null");
+                return;
+            }
 
-            var payment = Payment.CreateCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
 
-            await _paymentRepository.AddAsync(payment).ConfigureAwait(false);
+            var payment = Payment.CreateNewCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
+
+            await _paymentRepository.AddPaymentAsync(payment).ConfigureAwait(false);
 
             var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
 
             await _paymentRepository.UpdatePaymentStatusAsync(bankResult.PaymentId, bankResult.PaymentStatus).ConfigureAwait(false);
 
             _paymentOutputPort.OK(BuildOutput(bankResult));
-
         }
 
 

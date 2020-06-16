@@ -37,6 +37,7 @@ namespace Payment.Api
 
             services.AddPaymentApplication();
             services.AddPaymentPresenterV1();
+            services.AddInMemoryDatabase();
             services.AddAcquiringBank(Configuration);
             services.AddAcquiringBankMock(Configuration);
         }

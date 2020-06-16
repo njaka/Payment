@@ -40,10 +40,10 @@ namespace Payment.Api.Controllers.V1.ProcessPayment
         [Required]
         public DateTime ExpirationDate { get; set; }
 
-        /// <summary>
-        /// CCV
+        /// <summary
+        /// CVV
         /// </summary>
         [Required]
-        public string CCV { get; set; }
+        public string CVV { get; set; }
     }
 }
