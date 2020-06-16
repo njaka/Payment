@@ -52,6 +52,7 @@ namespace Payment.Api
 
             appBuilder.UseHttpsRedirection();
             appBuilder.UseStaticFiles();
+            appBuilder.UseCustomHttpMetrics();
             appBuilder.UseRouting();
             appBuilder.UseEndpoints(endpoints =>
             {

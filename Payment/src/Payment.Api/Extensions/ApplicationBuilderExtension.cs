@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Builder;
     using Payment.Api.Configuration;
+    using Prometheus;
 
     public static class ApplicationBuilderExtensions
     {
@@ -26,5 +27,23 @@
 
             return app;
         }
+
+
+        public static IApplicationBuilder UseCustomHttpMetrics(this IApplicationBuilder appBuilder)
+        {
+            return appBuilder
+                .UseMetricServer()
+                .UseHttpMetrics(options =>
+                {
+                    options.RequestDuration.Enabled = false;
+                    options.InProgress.Enabled = false;
+                    options.RequestCount.Counter = Metrics.CreateCounter(
+                        "prometheus_demo_request_total",
+                        "HTTP Requests Total",
+                        new CounterConfiguration { LabelNames = new[] { "method", "controller", "action", "code" } });
+                });
+        }
+
+
     }
 }
