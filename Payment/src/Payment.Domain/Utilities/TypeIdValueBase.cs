@@ -11,5 +11,7 @@
                 throw new InvalidOperationException("Id value cannot be empty!");
             Value = value;
         }
+
+        public Guid ToGuid() => Value;
     }
 }
