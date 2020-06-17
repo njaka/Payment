@@ -1,6 +1,6 @@
 ### .Net Challenge - Simple Card Payment
 ##Assumptions
-...
+(in progress)
 ## Required
 - ASP.NET Core 3.1
 
@@ -22,7 +22,7 @@ URI: /api/v1.0/payment/{paymentId}
 - Metrics : {baseUrl}/metrics
 
 ##Containerization
-...
+(in progress)
 
 ## Architecture
 - Onion Architecture
