@@ -14,6 +14,11 @@ URI: /api/v1.0/payment
 Method: GET
 
 URI: /api/v1.0/payment/{paymentId}
+
+## Monitoring
+- HealthCheck : {baseUrl}/health
+- Metrics : {baseUrl}/metrics
+
 ## Architecture
 - Onion Architecture
 
