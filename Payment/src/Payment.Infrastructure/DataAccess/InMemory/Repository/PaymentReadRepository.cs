@@ -38,7 +38,7 @@
                 PaymentId = p.PaymentId,
                 Card = new CardDto()
                 {
-                    CardNumber = p.Card.CardNumber,
+                    CardNumber = p.Card.CardHint,
                     ExpirationDate = p.Card.ExpirationDate,
                     CVV = p.Card.CVV
                 },

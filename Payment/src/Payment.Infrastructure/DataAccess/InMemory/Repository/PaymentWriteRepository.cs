@@ -24,10 +24,11 @@
         /// <returns></returns>
         public Task<PaymentId> AddPaymentAsync(Payment payment)
         {
-            var card = GetCard(payment.Card.CardNumber) ??  new CardEntity()
+            var card = GetCard(payment.Card.CardNumber) ?? new CardEntity()
             {
                 Id = CardEntityNextIndex,
                 CardNumber = payment.Card.CardNumber.ToString(),
+                CardHint = payment.Card.CardNumber.CardHint,
                 CVV = payment.Card.CVV.ToString(),
                 ExpirationDate = payment.Card.ExpirationDate.Value
             };
