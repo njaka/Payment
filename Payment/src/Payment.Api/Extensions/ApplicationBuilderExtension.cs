@@ -38,7 +38,7 @@
                     options.RequestDuration.Enabled = false;
                     options.InProgress.Enabled = false;
                     options.RequestCount.Counter = Metrics.CreateCounter(
-                        "prometheus_demo_request_total",
+                        "payment_gateway_request_total",
                         "HTTP Requests Total",
                         new CounterConfiguration { LabelNames = new[] { "method", "controller", "action", "code" } });
                 });

@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Options;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
@@ -10,18 +12,21 @@ namespace Payment.Acquiring
     {
         public enum Status { SUCCESSFUL = 1, UNSUCCESSFUL = 2 }
 
-        public const string UNSUCCESSFUL_CARDNUMBER = "4111111111111111";
-
-        public string Input { get; private set; }
+        public List<UnsuccessFullCardModel> _unSuccessFullCards;
+     
+        public MockBankHttpMessageHandler(List<UnsuccessFullCardModel> unSuccessFullCards)
+        {
+            _unSuccessFullCards = unSuccessFullCards;
+        }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
             if (request.Content != null)
             {
-                Input = await request.Content.ReadAsStringAsync();
+                var input = await request.Content.ReadAsStringAsync();
 
-                var cardPayment = JsonSerializer.Deserialize<CardPaymentRequest>(Input);
+                var cardPayment = JsonSerializer.Deserialize<CardPaymentRequest>(input);
 
                 var _response = new
                 {
@@ -45,7 +50,7 @@ namespace Payment.Acquiring
 
         private Status GetStatus(string cardNumber)
         {
-            if (cardNumber == UNSUCCESSFUL_CARDNUMBER)
+           if (_unSuccessFullCards.Exists(x=>x.CardNumber== cardNumber))
                 return Status.UNSUCCESSFUL;
 
             return Status.SUCCESSFUL;

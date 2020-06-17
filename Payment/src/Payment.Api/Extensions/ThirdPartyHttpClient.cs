@@ -5,6 +5,7 @@ using Payment.Acquiring;
 using Payment.Acquiring.Configuration;
 using Payment.Api.Configuration;
 using System;
+using System.Collections.Generic;
 
 namespace Payment.Api
 {
@@ -53,9 +54,11 @@ namespace Payment.Api
         public static IServiceCollection AddAcquiringBankMock(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<FeaturesModel>(configuration.GetSection("Features"));
+            var unSuccessFullCards = configuration.GetSection("FailedCards").Get<List<UnsuccessFullCardModel>>();
 
             services.AddHttpClient(Constants.MOCK_BANK)
-                  .ConfigurePrimaryHttpMessageHandler(() => new MockBankHttpMessageHandler())
+                  .ConfigurePrimaryHttpMessageHandler(() => new MockBankHttpMessageHandler(unSuccessFullCards) { 
+                  })
                   .ConfigureHttpClient((sp, options) =>
                   {
                       options.BaseAddress = new Uri("http://mock-bank");
