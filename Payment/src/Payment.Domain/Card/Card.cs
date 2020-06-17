@@ -6,14 +6,12 @@ namespace Payment.Domain
     {
         public CardNumber CardNumber { get; protected set; }
 
-        public DateTime ExpirationDate { get; protected set; }
+        public ExpiryDate ExpirationDate { get; protected set; }
 
         public CVV CVV { get; protected set; }
 
-        public Card(CardNumber cardNumber, DateTime expirationDate, CVV ccv)
+        public Card(CardNumber cardNumber, ExpiryDate expirationDate, CVV ccv)
         {
-            this.CheckRule(new ExpirationDateShouldBeGreaterThanDatetimeNow(expirationDate));
-
             this.CardNumber = cardNumber;
             this.ExpirationDate = expirationDate;
             this.CVV = ccv;

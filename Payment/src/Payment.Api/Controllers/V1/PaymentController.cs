@@ -80,7 +80,7 @@ namespace Payment.Api.Controllers.V1
             {
                 Card = new Domain.Card(
                         new CardNumber(request.Card.CardNumber),
-                        request.Card.ExpirationDate,
+                        new ExpiryDate(request.Card.ExpirationDate),
                         new CVV(request.Card.CVV)),
 
 

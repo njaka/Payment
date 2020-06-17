@@ -45,7 +45,7 @@ namespace Payment.Acquiring
                 {
                     CardNumber = payment.Card.CardNumber.ToString(),
                     CVV = payment.Card.CVV.ToString(),
-                    ExpirationDate = payment.Card.ExpirationDate
+                    ExpirationDate = payment.Card.ExpirationDate.Value
                 }
             };
 

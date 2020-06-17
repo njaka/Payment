@@ -15,6 +15,10 @@ namespace Payment.Domain
             this.Details = brokenRule.Message;
         }
 
+        public ValueObjectException(string message):base(message)
+        {
+
+        }
         public override string ToString()
         {
             return $"{BrokenRule.GetType().FullName}: {BrokenRule.Message}";

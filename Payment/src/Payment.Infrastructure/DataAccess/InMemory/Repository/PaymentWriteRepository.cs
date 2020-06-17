@@ -29,7 +29,7 @@
                 Id = CardEntityNextIndex,
                 CardNumber = payment.Card.CardNumber.ToString(),
                 CVV = payment.Card.CVV.ToString(),
-                ExpirationDate = payment.Card.ExpirationDate
+                ExpirationDate = payment.Card.ExpirationDate.Value
             };
 
             var newPayment = new PaymentEntity()

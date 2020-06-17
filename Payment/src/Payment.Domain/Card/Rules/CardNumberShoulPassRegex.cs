@@ -15,7 +15,7 @@
         {
             if (_value is null) return true;
 
-            const string RegExForValidation = @"^4[0-9]{12}(?:[0-9]{3})?$";
+            const string RegExForValidation = @"^4[0-9]{12}(?:[0-9]{3})?$";//Visa Card Regex: just for testing purpose
 
             Regex regex = new Regex(RegExForValidation);
             Match match = regex.Match(_value);

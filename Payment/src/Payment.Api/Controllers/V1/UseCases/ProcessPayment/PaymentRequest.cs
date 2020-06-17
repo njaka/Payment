@@ -38,7 +38,7 @@ namespace Payment.Api.Controllers.V1.ProcessPayment
         /// Card Expiration Date
         /// </summary>
         [Required]
-        public DateTime ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; }
 
         /// <summary
         /// CVV
