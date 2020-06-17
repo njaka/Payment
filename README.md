@@ -73,3 +73,10 @@ e.g payment details
 
 ![](docs/flow-diagram.png)
 
+## Technologies used:
+
+- FluentMediator for handling events (https://github.com/ivanpaulovich/FluentMediator)
+- Metrics using prometheus
+- InMemory Database
+- Native .Net Core DI
+- Api documentation with Swagger
