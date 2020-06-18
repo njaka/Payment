@@ -57,6 +57,18 @@ e.g payment details
   "paymentDate": "2020-06-18T00:05:20.0491589+02:00"
 }
 ```
+## Containerization
+
+Build image 
+
+```
+docker build -t njakaraz/paymentgateway:latest
+```
+Image pushed to Registry
+
+```
+docker push njakaraz/paymentgateway:latest
+```
 
 ## Monitoring
 - HealthCheck : {baseUrl}/health
