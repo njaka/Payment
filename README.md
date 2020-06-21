@@ -64,11 +64,19 @@ Build image
 ```
 docker build -t njakaraz/paymentgateway:latest
 ```
+
 Image pushed to Registry
 
 ```
 docker push njakaraz/paymentgateway:latest
 ```
+
+Run
+
+```
+docker run -it --rm -p 5053:80 njakaraz/paymentgateway --name paymentgateway
+```
+Access: http://localhost:5053/index.html
 
 ## Monitoring
 - HealthCheck : {baseUrl}/health
