@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Payment.Api</name>
+    </assembly>
+    <members>
+        <member name="M:Payment.Api.Configuration.ConfigurationExtension.GetVersioningConfiguration(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Gets the versioning configuration.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.Configuration.ConfigurationExtension.GetSwaggerConfiguration(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Gets the swagger configuration.
+            </summary>
+            <param name="configuration">The configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Payment.Api.Configuration.SwaggerConfigurationModel">
+            <summary>
+            Configuration model for Swagger
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Configuration.SwaggerConfigurationModel.Versions">
+            <summary>
+            Gets or sets the version collection.
+            </summary>
+            <value>
+            The versions.
+            </value>
+        </member>
+        <member name="P:Payment.Api.Configuration.SwaggerConfigurationModel.XmlDocumentation">
+            <summary>
+            Gets or sets the documentation files used by SwaggerGen
+            </summary>
+        </member>
+        <member name="T:Payment.Api.Configuration.VersionConfigurationModel">
+            <summary>
+            Defines the configuration data for an Api version
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Configuration.VersionConfigurationModel.Version">
+            <summary>
+            Gets or sets the version (format m.n.p).
+            </summary>
+            <value>
+            The version.
+            </value>
+        </member>
+        <member name="P:Payment.Api.Configuration.VersionConfigurationModel.Title">
+            <summary>
+            Gets or sets the title of the current version.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:Payment.Api.Configuration.VersionConfigurationModel.Description">
+            <summary>
+            Gets or sets the title of the current description.
+            </summary>
+            <value>
+            The title.
+            </value>
+        </member>
+        <member name="P:Payment.Api.Configuration.VersionConfigurationModel.Email">
+            <summary>
+            Gets or sets the contact email.
+            </summary>
+            <value>
+            The email.
+            </value>
+        </member>
+        <member name="T:Payment.Api.Configuration.ThirdPartyModel">
+            <summary>
+            Third party Configuration Http Model
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Configuration.ThirdPartyModel.BaseAddress">
+            <summary>
+            Base Address
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Configuration.ThirdPartyModel.Timeout">
+            <summary>
+            Time out
+            </summary>
+        </member>
+        <member name="T:Payment.Api.Configuration.Versioning.VersioningConfigurationModel">
+            <summary>
+            Defines the configuration for Api versioning
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Configuration.Versioning.VersioningConfigurationModel.Default">
+            <summary>
+            Gets or sets the default version (format m.n.p).
+            </summary>
+            <value>
+            The default version.
+            </value>
+        </member>
+        <member name="P:Payment.Api.Configuration.Versioning.VersioningConfigurationModel.RouteConstraintName">
+            <summary>
+            Gets or sets the name of the route constraint.
+            </summary>
+            <value>
+            The name of the route contraint.
+            </value>
+        </member>
+        <member name="T:Payment.Api.Controllers.V1.PaymentController">
+            <summary>
+            Payment Controller
+            </summary>
+        </member>
+        <member name="M:Payment.Api.Controllers.V1.PaymentController.ProcessPayment(Payment.Api.Controllers.V1.ProcessPayment.PaymentRequest)">
+            <summary>
+            Process payment
+            </summary>
+            <param name="paymentRequest">payment Request</param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.Controllers.V1.PaymentController.GetPaymentDetail(System.Guid)">
+            <summary>
+            Retrieve Payment Detail
+            </summary>
+            <param name="paymentId">payment Identifier</param>
+            <returns></returns>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.ProcessPayment.PaymentRequest.Card">
+            <summary>
+            Card
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.ProcessPayment.PaymentRequest.Amount">
+            <summary>
+            Amount
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.ProcessPayment.PaymentRequest.Currency">
+            <summary>
+            Currency
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.ProcessPayment.PaymentRequest.BeneficiaryAlias">
+            <summary>
+            Beneficiary Alias
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.ProcessPayment.Card.ExpirationDate">
+            <summary>
+            Card Expiration Date
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Payment.Api.Controllers.V1.ProcessPayment.Card.CVV" -->
+        <member name="T:Payment.Api.Controllers.V1.PaymentResponse">
+            <summary>
+            Process Payment Response
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.PaymentResponse.PaymentId">
+            <summary>
+            Payment Identifier
+            </summary>
+        </member>
+        <member name="P:Payment.Api.Controllers.V1.PaymentResponse.PaymentStatus">
+            <summary>
+            Payment Status
+            </summary>
+        </member>
+        <member name="M:Payment.Api.ApplicationBuilderExtensions.ConfigureSwagger(Microsoft.AspNetCore.Builder.IApplicationBuilder,Payment.Api.Configuration.SwaggerConfigurationModel)">
+            <summary>
+            Configures swagger Middleware.
+            </summary>
+            <param name="app">The application.</param>
+            <param name="swaggerConfiguration">The swagger configuration.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Payment.Api.Extensions.MetricsExtension">
+            <summary>
+            Metric Extension
+            </summary>
+        </member>
+        <member name="M:Payment.Api.Extensions.MetricsExtension.UseCustomHttpMetrics(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            Use Custom Http Metricss
+            </summary>
+            <param name="appBuilder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.ThirdPartyHttpClient.AddHttpClient(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.String,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Add http named client
+            </summary>
+            <param name="services"></param>
+            <param name="clientName"></param>
+            <param name="configSection"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.ThirdPartyHttpClient.AddAcquiringBank(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Add acquiring banks
+            </summary>
+            <param name="services"></param>
+            <param name="configuration"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.ThirdPartyHttpClient.AddAcquiringBankMock(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Add Mock Bank
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Payment.Api.Filter.HttpExceptionFilter.#ctor(Microsoft.Extensions.Logging.ILogger{Payment.Api.Filter.HttpExceptionFilter})">
+            <summary>
+            constructor <see cref="T:Payment.Api.Filter.HttpExceptionFilter" />
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Payment.Api.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Startup
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:Payment.Api.Startup.Configuration">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>
