@@ -1,4 +1,3 @@
-### .Net Challenge - Simple Card Payment
 
 ## Required
 - ASP.NET Core 3.1
