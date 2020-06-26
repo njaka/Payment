@@ -88,10 +88,6 @@ Access: http://localhost:5053/index.html
 <img src="docs/onion-architecture.png" width="400" align="center">
 </p>
 
-- Diagram Flow - CQRS
-
-![](docs/flow-diagram.png)
-
 ## Technologies used:
 
 - FluentMediator for handling events (https://github.com/ivanpaulovich/FluentMediator)
