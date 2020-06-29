@@ -8,11 +8,11 @@ using System.Text.Json;
 
 namespace Payment.EventStore
 {
-    public class EventSourcing : IEventSourcing
+    public class EventStore : IEventSourcing
     {
         private readonly IEventStoreConnection _eventSourcing;
 
-        public EventSourcing(IEventStoreConnection eventSourcing)
+        public EventStore(IEventStoreConnection eventSourcing)
         {
             _eventSourcing = eventSourcing;
         }

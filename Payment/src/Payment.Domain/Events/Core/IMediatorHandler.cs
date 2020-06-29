@@ -2,9 +2,8 @@
 
 namespace Payment.Domain
 {
-    public interface IMediatorHandler
+    public interface IEventSourcingHandler
     {
-        Task<object> SendCommand<T>(T command);
         Task RaiseEvent<T>(T @event, string stream) where T : Event;
     }
 }
