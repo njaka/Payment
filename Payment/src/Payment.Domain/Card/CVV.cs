@@ -1,6 +1,8 @@
-﻿namespace Payment.Domain
+﻿using System.Collections.Generic;
+
+namespace Payment.Domain
 {
-    public class CVV : ValueObject
+    public class CVV : ValueObject<CVV>
     {
         private readonly string _value;
 
@@ -12,5 +14,10 @@
         }
 
         public override string ToString() => _value;
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return _value;
+        }
     }
 }

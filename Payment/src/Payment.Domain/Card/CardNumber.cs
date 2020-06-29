@@ -1,8 +1,9 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 
 namespace Payment.Domain
 {
-    public class CardNumber : ValueObject
+    public class CardNumber : ValueObject<CardNumber>
     {
         private readonly string _value;
 
@@ -16,5 +17,10 @@ namespace Payment.Domain
         public string CardHint => $"{_value.Substring(0, 6)}XXXXXX{_value.Substring(12, _value.Length - 12)}";
 
         public override string ToString() => _value;
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return _value;
+        }
     }
 }
