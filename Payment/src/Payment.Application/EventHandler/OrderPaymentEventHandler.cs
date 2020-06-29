@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using Payment.Domain;
+using Payment.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Payment.Domain.Events.Handlers
+namespace Payment.Application.Events.Handlers
 {
     public class OrderPaymentEventHandler : INotificationHandler<OrderPaymentOpened>,
-                                            INotificationHandler<OrderPaymentPaid>
+                                            INotificationHandler<OrderPaymentStatusChanged>
     {
         private static readonly string STREAMNAME = "OrderPayment"; 
 
@@ -21,13 +23,13 @@ namespace Payment.Domain.Events.Handlers
         public async Task Handle(OrderPaymentOpened notification, CancellationToken cancellationToken)
         {
             // Talk with NJaka about stream name 
-            await _eventSourcing.RaiseEvent(notification, STREAMNAME);
+            await _eventSourcing.RaiseEventAsync(notification, $"{STREAMNAME}{notification.BeneficiaryAlias}");
         }
 
-        public async Task Handle(OrderPaymentPaid notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderPaymentStatusChanged notification, CancellationToken cancellationToken)
         {
             // Talk with NJaka about stream name 
-            await _eventSourcing.RaiseEvent(notification, STREAMNAME);
+            await _eventSourcing.RaiseEventAsync(notification, $"{STREAMNAME}{notification.BeneficiaryAlias}");
         }
     }
 }

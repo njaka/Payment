@@ -8,6 +8,6 @@ namespace Payment.Infrastructure.EventSourcing
 {
     public interface IEventSourcing
     {
-        Task AppendEventOnStream(Event @event, string stream);
+        Task AppendEventOnStreamAsync<T>(T @event, string stream) where T : Event; 
     }
 }

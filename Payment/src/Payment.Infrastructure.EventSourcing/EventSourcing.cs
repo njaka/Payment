@@ -16,9 +16,9 @@ namespace Payment.Infrastructure.EventSourcing
             _eventSourcing = eventSourcing;
         }
 
-        public Task RaiseEvent<T>(T @event, string stream) where T : Event
+        public async Task RaiseEventAsync<T>(T @event, string stream) where T : Event
         {
-            return _eventSourcing.AppendEventOnStream(@event, stream);
+            await _eventSourcing.AppendEventOnStreamAsync(@event, stream);
         }
     }
 }
