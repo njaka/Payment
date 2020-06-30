@@ -12,13 +12,11 @@
     /// </summary>
     public class ProcessCardPayment : IUseCase<ProcessPaymentInput>
     {
-        private readonly IMediator _mediator;
         private readonly IProcessPaymentOutputPort _paymentOutputPort;
         private readonly IBankService _bankService;
 
-        public ProcessCardPayment(IMediator mediator, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
+        public ProcessCardPayment(IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
             _paymentOutputPort = paymentOutputPort ?? throw new ArgumentNullException(nameof(paymentOutputPort));
         }

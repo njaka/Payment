@@ -30,12 +30,11 @@ namespace Payment.Api
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
             services.AddScoped<IEventSourcingHandler, EventSourcing>();
-            services.AddScoped<IEventSourcing, EventStore.EventStore>();
+            services.AddSingleton<IEventSourcing, EventStore.EventStore>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
             services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));
             services.AddScoped<INotificationHandler<OrderPaymentCreated>, OrderPaymentEventHandler>();
             services.AddScoped<INotificationHandler<OrderPaymentStatusChanged>, OrderPaymentEventHandler>();
-            services.AddMediatR(typeof(Startup));
 
             services.AddFluentMediator(
             builder =>
