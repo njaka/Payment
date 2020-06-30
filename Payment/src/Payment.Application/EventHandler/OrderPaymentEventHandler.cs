@@ -12,7 +12,7 @@ namespace Payment.Application.Events.Handlers
     public class OrderPaymentEventHandler : INotificationHandler<OrderPaymentCreated>,
                                             INotificationHandler<OrderPaymentStatusChanged>
     {
-        private static readonly string STREAMNAME = "OrderPayment"; 
+        private static readonly string STREAMNAME = "Wallet-"; 
 
         private readonly IEventSourcingHandler _eventSourcing;
 

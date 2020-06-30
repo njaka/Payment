@@ -10,7 +10,7 @@ using EventStore.ClientAPI.SystemData;
 
 namespace Payment.EventStore
 {
-    public class EventStore : IEventSourcing
+    public class EventStore : IEventSourcing, IDisposable
     {
         private IEventStoreConnection _eventSourcing;
 
@@ -22,6 +22,7 @@ namespace Payment.EventStore
 
         public async Task AppendEventOnStreamAsync<T>(T @event, string stream) where T : Event
         {
+            
             await _eventSourcing.AppendToStreamAsync(stream, ExpectedVersion.Any, BuildEventData(@event)).ConfigureAwait(false);
         }
 
@@ -34,6 +35,12 @@ namespace Payment.EventStore
                 Encoding.ASCII.GetBytes(JsonSerializer.Serialize(@event)),
                 null
                 );
+        }
+
+        public void Dispose()
+        {
+            _eventSourcing.Close();
+            _eventSourcing = null;
         }
     }
 }
