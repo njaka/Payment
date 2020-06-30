@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Payment.Api.Configuration.Model;
 using Payment.Api.Configuration.Versioning;
 
 namespace Payment.Api.Configuration
@@ -25,6 +26,16 @@ namespace Payment.Api.Configuration
             var model = configuration.GetSection("Api:Swagger").Get<SwaggerConfigurationModel>();
 
             return model;
+        }
+
+        /// <summary>
+        /// Gets the versioning configuration.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public static EventSourcingConfigurationModel GetEventSourcingConfigurarionModel(this IConfiguration configuration)
+        {
+            return configuration.GetSection("EventSourcing").Get<EventSourcingConfigurationModel>();
         }
     }
 }

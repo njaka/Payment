@@ -1,5 +1,6 @@
 ﻿namespace Payment.Domain
 {
+    using global::Payment.Domain.Events;
     using System;
     public class Payment
     {
@@ -21,6 +22,21 @@
             return new Payment(card, amount, beneficiaryAlias);
         }
 
+        public void UpdateStatus(PaymentStatus status)
+        {
+            this.Status = status;
+
+            DomainEvents
+                    .Raise(
+                            OrderPaymentStatusChanged
+                                    .CreateNewOrderPaymentStatusChanged(
+                                                            this.PaymentId.Value,
+                                                            this.Status.ToString(),
+                                                            this.BeneficiaryAlias
+                                                           )
+                           );
+        }
+
         private Payment(Card card, Money amount, string beneficiaryAlias)
         {
             this.PaymentId = new PaymentId(Guid.NewGuid());
@@ -29,6 +45,18 @@
             this.BeneficiaryAlias = beneficiaryAlias;
             this.Status = PaymentStatus.Pending;
             this.CreatedOn = DateTime.Now;
+
+            DomainEvents
+                    .Raise(
+                            OrderPaymentCreated
+                                    .CreateNewOrderPayment(
+                                                            this.PaymentId.Value,
+                                                            this.BeneficiaryAlias,
+                                                            this.Amount.Amount,
+                                                            this.Amount.Currency.ToString(),
+                                                            this.Status.ToString()
+                                                           )
+                           );
         }
     }
 }

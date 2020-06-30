@@ -2,7 +2,9 @@
 namespace Payment.Domain
 {
     using System;
-    public class Card : ValueObject
+    using System.Collections.Generic;
+
+    public class Card : ValueObject<Card>
     {
         public CardNumber CardNumber { get; protected set; }
 
@@ -15,6 +17,13 @@ namespace Payment.Domain
             this.CardNumber = cardNumber;
             this.ExpirationDate = expirationDate;
             this.CVV = ccv;
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return CardNumber;
+            yield return ExpirationDate;
+            yield return CVV;
         }
     }
 }

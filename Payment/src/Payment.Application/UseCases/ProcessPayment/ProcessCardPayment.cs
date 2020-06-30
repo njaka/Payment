@@ -1,7 +1,9 @@
 ﻿namespace Payment.Application.UseCases
 {
+    using MediatR;
     using Payment.Application.Port;
     using Payment.Domain;
+    using Payment.Domain.Events;
     using System;
     using System.Threading.Tasks;
 
@@ -10,13 +12,13 @@
     /// </summary>
     public class ProcessCardPayment : IUseCase<ProcessPaymentInput>
     {
-        private readonly IPaymentWriteRepository _paymentRepository;
+        private readonly IMediator _mediator;
         private readonly IProcessPaymentOutputPort _paymentOutputPort;
         private readonly IBankService _bankService;
 
-        public ProcessCardPayment(IPaymentWriteRepository paymentRepository, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
+        public ProcessCardPayment(IMediator mediator, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
         {
-            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
             _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
             _paymentOutputPort = paymentOutputPort ?? throw new ArgumentNullException(nameof(paymentOutputPort));
         }
@@ -29,14 +31,11 @@
                 return;
             }
 
-
             var payment = Payment.CreateNewCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
-
-            await _paymentRepository.AddPaymentAsync(payment).ConfigureAwait(false);
 
             var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
 
-            await _paymentRepository.UpdatePaymentStatusAsync(bankResult.PaymentId, bankResult.PaymentStatus).ConfigureAwait(false);
+            payment.UpdateStatus(bankResult.PaymentStatus);
 
             _paymentOutputPort.OK(BuildOutput(bankResult));
         }

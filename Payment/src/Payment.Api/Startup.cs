@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Payment.Api.Configuration;
 using Payment.Api.Extensions;
+using Payment.Domain.Events;
 
 namespace Payment.Api
 {
@@ -36,7 +37,7 @@ namespace Payment.Api
             services.AddSwagger(Configuration.GetSwaggerConfiguration());
             services.AddHttpExceptionFilter();
 
-            services.AddPaymentApplication();
+            services.AddPaymentApplication(Configuration.GetEventSourcingConfigurarionModel());
             services.AddPaymentPresenterV1();
             services.AddInMemoryDatabase();
             services.AddAcquiringBank(Configuration);

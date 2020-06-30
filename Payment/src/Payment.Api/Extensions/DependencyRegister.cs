@@ -1,26 +1,41 @@
-﻿using FluentMediator;
+﻿using EventStore.ClientAPI;
+using FluentMediator;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Payment.Acquiring;
+using Payment.Api.Configuration;
+using Payment.Api.Configuration.Model;
 using Payment.Api.Controllers.V1;
 using Payment.Api.Controllers.V1.RetrievePaymentDetail;
 using Payment.Application;
+using Payment.Application.Events.Handlers;
 using Payment.Application.Port;
 using Payment.Application.UseCases;
 using Payment.Domain;
+using Payment.Domain.Events;
+using Payment.EventStore;
 using Payment.Infrastructure.DataAccess.InMemory;
+using Payment.Infrastructure.EventSourcing;
+using System;
 
 namespace Payment.Api
 {
     public static class DependencyRegister
     {
-        internal static IServiceCollection AddPaymentApplication(this IServiceCollection services)
+        internal static IServiceCollection AddPaymentApplication(this IServiceCollection services, EventSourcingConfigurationModel eventSourcingConfigurationModel)
         {
             services.AddScoped<IUseCase<ProcessPaymentInput>, ProcessCardPayment>();
             services.AddScoped<IUseCase<RetrievePaymentInput>, RetrievePaymentDetail>();
            
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
+            services.AddScoped<IEventSourcingHandler, EventSourcing>();
+            services.AddScoped<IEventSourcing, EventStore.EventStore>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
+            services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));
+            services.AddScoped<INotificationHandler<OrderPaymentCreated>, OrderPaymentEventHandler>();
+            services.AddScoped<INotificationHandler<OrderPaymentStatusChanged>, OrderPaymentEventHandler>();
+            services.AddMediatR(typeof(Startup));
 
             services.AddFluentMediator(
             builder =>
