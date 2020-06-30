@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Payment.Api.Configuration;
 using Payment.Api.Extensions;
+using Payment.Api.Services;
 using Payment.Domain.Events;
 
 namespace Payment.Api
@@ -36,7 +37,7 @@ namespace Payment.Api
             services.AddApiVersioning(Configuration.GetVersioningConfiguration());
             services.AddSwagger(Configuration.GetSwaggerConfiguration());
             services.AddHttpExceptionFilter();
-
+            services.AddGrpc();
             services.AddPaymentApplication(Configuration.GetEventSourcingConfigurarionModel());
             services.AddPaymentPresenterV1();
             services.AddInMemoryDatabase();
@@ -58,9 +59,11 @@ namespace Payment.Api
             appBuilder.UseRouting();
             appBuilder.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<PaymentServices>();
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("health");
             });
+
             appBuilder.ConfigureSwagger(Configuration.GetSwaggerConfiguration());
         }
     }
