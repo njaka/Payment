@@ -57,7 +57,7 @@ e.g payment details
 }
 ```
 
-## Event Stora
+## Event Store
 
 Download (EventStoreDB 5.0.8)
 
