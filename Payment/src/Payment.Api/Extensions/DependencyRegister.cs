@@ -33,7 +33,7 @@ namespace Payment.Api
             services.AddScoped<IEventSourcing, EventStore.EventStore>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
             services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));
-            services.AddScoped<INotificationHandler<OrderPaymentOpened>, OrderPaymentEventHandler>();
+            services.AddScoped<INotificationHandler<OrderPaymentCreated>, OrderPaymentEventHandler>();
             services.AddScoped<INotificationHandler<OrderPaymentStatusChanged>, OrderPaymentEventHandler>();
             services.AddMediatR(typeof(Startup));
 

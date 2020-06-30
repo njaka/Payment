@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Payment.Api.Configuration;
 using Payment.Api.Extensions;
+using Payment.Domain.Events;
 
 namespace Payment.Api
 {

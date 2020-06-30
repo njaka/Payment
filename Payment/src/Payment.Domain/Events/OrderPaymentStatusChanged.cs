@@ -7,7 +7,7 @@ namespace Payment.Domain.Events
 {
     public class OrderPaymentStatusChanged : Event
     {
-        public static OrderPaymentStatusChanged CreateNewOrderPaymentOpened(Guid id, string paymentStatus, string beneficiaryAlias)
+        public static OrderPaymentStatusChanged CreateNewOrderPaymentStatusChanged(Guid id, string paymentStatus, string beneficiaryAlias)
         {
             return new OrderPaymentStatusChanged(id, paymentStatus, beneficiaryAlias);
         }

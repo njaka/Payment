@@ -30,23 +30,12 @@
                 _paymentOutputPort.BadRequest("input is null");
                 return;
             }
-            
 
             var payment = Payment.CreateNewCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
 
-            // Refactory and create a Bus to encapsulate it
-            await _mediator
-                    .Publish(OrderPaymentOpened.CreateNewOrderPaymentOpened(payment.PaymentId.Value,
-                                                                                        input.BeneficiaryAlias,
-                                                                                        input.Amount.Amount,
-                                                                                        input.Amount.Currency.ToString()));
-
             var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
 
-            await _mediator
-                    .Publish(OrderPaymentStatusChanged.CreateNewOrderPaymentOpened(bankResult.PaymentId.Value,
-                                                                                        bankResult.PaymentStatus.ToString(), 
-                                                                                        input.BeneficiaryAlias));
+            payment.UpdateStatus(bankResult.PaymentStatus);
 
             _paymentOutputPort.OK(BuildOutput(bankResult));
         }

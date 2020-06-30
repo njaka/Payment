@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Payment.Domain.Events;
 
 namespace Payment.Api
 {
@@ -7,7 +8,10 @@ namespace Payment.Api
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            IHost build = CreateHostBuilder(args).Build();
+            DomainEvents.Init(build.Services);
+            build.Run();
+            
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

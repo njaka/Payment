@@ -17,11 +17,11 @@ namespace Payment.EventStore
         public EventStore(IEventStoreConnection eventSourcing)
         {
             _eventSourcing = eventSourcing;
+            _eventSourcing.ConnectAsync().Wait();
         }
 
         public async Task AppendEventOnStreamAsync<T>(T @event, string stream) where T : Event
         {
-            await _eventSourcing.ConnectAsync();
             await _eventSourcing.AppendToStreamAsync(stream, ExpectedVersion.Any, BuildEventData(@event)).ConfigureAwait(false);
         }
 
