@@ -7,7 +7,7 @@ using FluentMediator;
 using Payment.Application.UseCases;
 using Payment.Domain;
 
-namespace Payment.Api
+namespace Payment.Service.Grpc
 {
     /// <summary>
     /// Payment Services

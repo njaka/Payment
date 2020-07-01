@@ -3,6 +3,7 @@
 namespace Payment.Api.Controllers.V1
 {
     using FluentMediator;
+    using Grpc.Net.Client;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Payment.Api.Controllers.V1.ProcessPayment;
@@ -11,6 +12,7 @@ namespace Payment.Api.Controllers.V1
     using Payment.Domain;
     using System;
     using System.Threading.Tasks;
+    using static Payment.Api.Payments;
 
     /// <summary>
     /// Payment Controller
@@ -24,11 +26,17 @@ namespace Payment.Api.Controllers.V1
         private readonly RetrievePaymentPresenter _retrievePaymentPresenter;
         private readonly ProcessPaymentPresenter _processPaymentPresenter;
 
+        private static PaymentsClient _walletsClient;
+
+     
         public PaymentController(
             IMediator mediator,
             RetrievePaymentPresenter retrievePaymentPresenter,
             ProcessPaymentPresenter processPaymentPresenter)
         {
+            var channel = GrpcChannel.ForAddress("https://localhost:5001");
+            _walletsClient = new Payments.PaymentsClient(channel);
+
             _mediator = mediator;
             _retrievePaymentPresenter = retrievePaymentPresenter;
             _processPaymentPresenter = processPaymentPresenter;
@@ -40,15 +48,28 @@ namespace Payment.Api.Controllers.V1
         /// <param name="paymentRequest">payment Request</param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaymentViewModelReply))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ProcessPayment(PaymentRequest paymentRequest)
+        public async Task<PaymentViewModelReply> ProcessPayment(PaymentRequest paymentRequest)
         {
-            var input = BuildPaymentInput(paymentRequest);
-            await _mediator.PublishAsync(input);
-            return _processPaymentPresenter.ViewModel;
+            var retorno = await _walletsClient
+                                        .ProcessAsync(new PaymentViewModelRequest() 
+                                        { 
+                                            Amount = Convert.ToString(paymentRequest.Amount), 
+                                            BeneficiaryAlias = paymentRequest.BeneficiaryAlias, 
+                                            Card = new Api.Card() 
+                                            { 
+                                                CardNumber = paymentRequest.Card.CardNumber, 
+                                                Cvv = paymentRequest.Card.CVV, 
+                                                ExpirationDate = paymentRequest.Card.ExpirationDate
+                                            }
+                                        , Currency = paymentRequest.Currency });
+
+            //var input = BuildPaymentInput(paymentRequest);
+            //await _mediator.PublishAsync(input);
+            return retorno;
         }
 
 
