@@ -1,8 +1,11 @@
 ﻿namespace Payment.Domain
 {
     using global::Payment.Domain.Events;
+    using global::Payment.Domain.Utilities;
     using System;
-    public class Payment
+    using System.Diagnostics.CodeAnalysis;
+
+    public class Payment : ModelBase
     {
         public PaymentId PaymentId { get; protected set; }
 
@@ -22,12 +25,11 @@
             return new Payment(card, amount, beneficiaryAlias);
         }
 
-        public void UpdateStatus(PaymentStatus status)
+        public Payment UpdateStatus(PaymentStatus status)
         {
             this.Status = status;
 
-            DomainEvents
-                    .Raise(
+            RegisterEvent(
                             OrderPaymentStatusChanged
                                     .CreateNewOrderPaymentStatusChanged(
                                                             this.PaymentId.Value,
@@ -35,9 +37,17 @@
                                                             this.BeneficiaryAlias
                                                            )
                            );
+            return this;
         }
 
-        private Payment(Card card, Money amount, string beneficiaryAlias)
+        public Payment RaiseEvents()
+        {
+            DomainEvents.DipatchEvents(_events);
+            _events.Clear();
+            return this;
+        }
+
+        private Payment(Card card, Money amount, string beneficiaryAlias) : base()
         {
             this.PaymentId = new PaymentId(Guid.NewGuid());
             this.Card = card;
@@ -46,8 +56,7 @@
             this.Status = PaymentStatus.Pending;
             this.CreatedOn = DateTime.Now;
 
-            DomainEvents
-                    .Raise(
+            RegisterEvent(
                             OrderPaymentCreated
                                     .CreateNewOrderPayment(
                                                             this.PaymentId.Value,

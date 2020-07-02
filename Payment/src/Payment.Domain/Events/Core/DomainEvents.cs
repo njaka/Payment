@@ -10,14 +10,22 @@ namespace Payment.Domain.Events
     public static class DomainEvents
     {
         private static IServiceProvider _serviceProvider;
+
         public static void Init(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
+        public static void DipatchEvents(IList<INotification> events)
+        {
+            foreach (var domainEvent in events)
+            {
+                Raise(domainEvent);
+            }
+        }
 
-        public static async void Raise<T>(T domainEvent)
-        where T : INotification
+        private static async void Raise<T>(T domainEvent)
+                where T : INotification
         {
             using (var scope = _serviceProvider.CreateScope())
             {

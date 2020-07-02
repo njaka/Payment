@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace Payment.Domain
 {
@@ -12,6 +13,30 @@ namespace Payment.Domain
 
             this.Amount = amount;
             this.Currency = (Currency)Enum.Parse(typeof(Currency), currency);
+        }
+
+        public Money(Decimal amount, Currency currency)
+        {
+            this.CheckRule(new AmountShouldBePositive(amount));
+
+            this.Amount = amount;
+            this.Currency = currency;
+        }
+
+        public Result<Money> Add(Money moneyAdd)
+        {
+            if (moneyAdd.Currency != Currency)
+                return Result.Failure<Money>("Different Corrency");
+            
+            return Result.Ok(new Money(Amount + moneyAdd.Amount, Currency));
+        }
+
+        public Result<Money> Subtract(Money moneyAdd)
+        {
+            if (moneyAdd.Currency != Currency)
+                return Result.Failure<Money>("Different Corrency");
+
+            return Result.Ok(new Money(Amount - moneyAdd.Amount, Currency));
         }
 
         public decimal ToDecimal()
