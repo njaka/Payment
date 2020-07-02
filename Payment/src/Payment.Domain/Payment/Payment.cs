@@ -63,7 +63,10 @@
                                                             this.BeneficiaryAlias,
                                                             this.Amount.Amount,
                                                             this.Amount.Currency.ToString(),
-                                                            this.Status.ToString()
+                                                            this.Status.ToString(),
+                                                            this.Card.CardNumber.CardHint,
+                                                            this.Card.CVV.ToString(),
+                                                            this.Card.ExpirationDate.Value
                                                            )
                            );
         }
