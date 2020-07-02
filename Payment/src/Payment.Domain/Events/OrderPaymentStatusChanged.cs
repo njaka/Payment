@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Payment.Domain.Events
 {
@@ -11,8 +12,9 @@ namespace Payment.Domain.Events
         {
             return new OrderPaymentStatusChanged(id, paymentStatus, beneficiaryAlias);
         }
-        
-        private OrderPaymentStatusChanged(Guid id, string paymentStatus, string beneficiaryAlias)
+
+        [JsonConstructor]
+        protected OrderPaymentStatusChanged(Guid id, string paymentStatus, string beneficiaryAlias)
         {
             Id = id;
             AggregateId = id;

@@ -10,14 +10,26 @@ namespace Payment.Domain.Events
     public static class DomainEvents
     {
         private static IServiceProvider _serviceProvider;
+
         public static void Init(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
+        public static void DipatchEvents(IList<INotification> events)
+        {
+            //TODO: Ugly code I know how fix it, but I don't had time lol
+            foreach (var domainEvent in events)
+            {
+                if(domainEvent.GetType().Name.Equals("OrderPaymentCreated"))
+                    Raise((OrderPaymentCreated)domainEvent);
+                else
+                    Raise((OrderPaymentStatusChanged)domainEvent);
+            }
+        }
 
         public static async void Raise<T>(T domainEvent)
-        where T : INotification
+                where T : INotification
         {
             using (var scope = _serviceProvider.CreateScope())
             {

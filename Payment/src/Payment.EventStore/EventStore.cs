@@ -4,9 +4,13 @@ using System;
 using System.Threading.Tasks;
 using EventStore.ClientAPI;
 using System.Text;
-using System.Text.Json;
 using System.Net;
 using EventStore.ClientAPI.SystemData;
+using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using Payment.Domain.Events.Core;
+using static Payment.Infrastructure.EventSourcing.IEventSourcing;
 
 namespace Payment.EventStore
 {
@@ -22,7 +26,6 @@ namespace Payment.EventStore
 
         public async Task AppendEventOnStreamAsync<T>(T @event, string stream) where T : Event
         {
-            
             await _eventSourcing.AppendToStreamAsync(stream, ExpectedVersion.Any, BuildEventData(@event)).ConfigureAwait(false);
         }
 
@@ -41,6 +44,31 @@ namespace Payment.EventStore
         {
             _eventSourcing.Close();
             _eventSourcing = null;
+        }
+
+        public async Task ReadStreamEventsForward(string stream, StreamMessageReceived streamMessageReceived)
+        {
+            var events = new List<EventResponse>();
+
+            StreamEventsSlice currentSlice = null;
+            long nextSliceStart = StreamPosition.Start;
+            do
+            {
+                currentSlice = await _eventSourcing.ReadStreamEventsForwardAsync(stream, 0, 100, false)
+                                .ConfigureAwait(false);
+                nextSliceStart = currentSlice.NextEventNumber;
+                foreach (var @event in currentSlice.Events)
+                {
+                    await streamMessageReceived(new EventResponse(
+                                                    @event.Event.EventStreamId,
+                                                    @event.Event.EventId,
+                                                    @event.Event.EventNumber,
+                                                    @event.Event.EventType,
+                                                    @event.Event.Data
+                                                ));
+                }
+
+            } while (!currentSlice.IsEndOfStream);
         }
     }
 }

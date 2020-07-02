@@ -1,10 +1,13 @@
 ﻿namespace Payment.Application.UseCases
 {
+    using CSharpFunctionalExtensions;
     using MediatR;
     using Payment.Application.Port;
     using Payment.Domain;
     using Payment.Domain.Events;
+    using Payment.Domain.Wallet;
     using System;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -28,24 +31,25 @@
                 _paymentOutputPort.BadRequest("input is null");
                 return;
             }
+            
+            Payment payment = Payment
+                            .CreateNewCardPayment
+                            (
+                                input.Card, 
+                                input.Amount, 
+                                input.BeneficiaryAlias
+                            )
+                            .RaiseEvents();
 
-            var payment = Payment.CreateNewCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
+            BankResult bankResult = await _bankService
+                                        .SubmitCardPaymentAsync(payment)
+                                        .ConfigureAwait(false);
 
-            var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
+            payment
+                .UpdateStatus(bankResult.PaymentStatus)
+                .RaiseEvents();
 
-            payment.UpdateStatus(bankResult.PaymentStatus);
-
-            _paymentOutputPort.OK(BuildOutput(bankResult));
-        }
-
-
-        private ProcessPaymentOutput BuildOutput(BankResult bankResult)
-        {
-            return new ProcessPaymentOutput()
-            {
-                PaymentId = bankResult.PaymentId,
-                PaymentStatus = bankResult.PaymentStatus
-            };
+            _paymentOutputPort.OK(bankResult.BuildOutput());
         }
     }
 }
