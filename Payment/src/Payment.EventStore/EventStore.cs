@@ -46,7 +46,7 @@ namespace Payment.EventStore
             _eventSourcing = null;
         }
 
-        public async void ReadStreamEventsForward(string stream, StreamMessageReceived streamMessageReceived)
+        public async Task ReadStreamEventsForward(string stream, StreamMessageReceived streamMessageReceived)
         {
             var events = new List<EventResponse>();
 

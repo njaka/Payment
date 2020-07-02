@@ -10,6 +10,7 @@ using Payment.Api.Controllers.V1.RetrievePaymentDetail;
 using Payment.Application;
 using Payment.Application.Events.Handlers;
 using Payment.Application.Port;
+using Payment.Application.Projections;
 using Payment.Application.UseCases;
 using Payment.Domain;
 using Payment.Domain.Events;
@@ -30,6 +31,7 @@ namespace Payment.Api
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
             services.AddScoped<IEventSourcingHandler, EventSourcing>();
+            services.AddScoped<IPaymentProjection, PaymentProjection>();
             services.AddSingleton<IEventSourcing, EventStore.EventStore>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
             services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));

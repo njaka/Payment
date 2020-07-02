@@ -1,33 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LiquidProjections;
-using Newtonsoft.Json;
-using Payment.Domain;
-using Payment.Domain.Events;
-using Payment.Domain.Events.Core;
-using Payment.Domain.Wallet;
-using Payment.Infrastructure.EventSourcing;
-using PaymentModel = Payment.Domain.Payment;
-namespace Payment.Application.Projections
+﻿namespace Payment.Application.Projections
 {
-    public class PaymentProjection
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using LiquidProjections;
+    using Newtonsoft.Json;
+    using Payment.Application.UseCases;
+    using Payment.Domain;
+    using Payment.Domain.Events;
+    using Payment.Domain.Events.Core;
+    using Payment.Domain.Wallet;
+    using Payment.Infrastructure.EventSourcing;
+    using PaymentModel = Payment.Domain.Payment;
+
+    public class PaymentProjection : IPaymentProjection
     {
         private readonly IEventMap<Balance> _map;
 
         private readonly Dictionary<Guid, IList<PaymentModel>> _events;
 
-
+        private readonly IEventSourcing _eventSourcing;
         public Balance Balance { get; } = Balance.CreateNewBalance(Money.CreateNewMoneyDollars(0), DateTime.UtcNow);
 
-        public Money GetBalance()
+        public async Task<RetriveBalanceOutput> GetBalanceByStreamId(string streamId)
         {
-            return Balance.Amount;
+            await _eventSourcing.ReadStreamEventsForward(streamId, StreamMessageReceived);
+
+            return new RetriveBalanceOutput() {
+                 Amount = Balance.Amount.Amount,
+                 Currency = Balance.Amount.Currency.ToString()
+            };
         }
 
-        public PaymentProjection(IEventSourcing eventSourcing, string streamId)
+        public PaymentProjection(IEventSourcing eventSourcing)
         {
             _events = new Dictionary<Guid, IList<PaymentModel>>();
             var mapBuilder = new EventMapBuilder<Balance>();
@@ -47,7 +54,6 @@ namespace Payment.Application.Projections
                 _events[OrderPayment.AggregateId].Add(payment);
             });
 
-            eventSourcing.ReadStreamEventsForward(streamId, StreamMessageReceived);
         }
 
         private Task StreamMessageReceived(EventResponse streamMessage)
