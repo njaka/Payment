@@ -36,6 +36,7 @@
 
         public PaymentProjection(IEventSourcing eventSourcing)
         {
+            _eventSourcing = eventSourcing;
             _events = new Dictionary<Guid, IList<PaymentModel>>();
             var mapBuilder = new EventMapBuilder<Balance>();
             mapBuilder.Map<OrderPaymentCreated>().As((OrderPayment, balance) =>

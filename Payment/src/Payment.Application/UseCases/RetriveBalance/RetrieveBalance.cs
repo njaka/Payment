@@ -1,20 +1,21 @@
 ﻿namespace Payment.Application.UseCases.RetriveBalance
 {
     using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using Payment.Application.Port;
     using Payment.Application.Projections;
-    
-    public class RetrieveBalance
+
+    public class RetrieveBalance : IUseCase<RetriveBalanceInput>
     {
         private readonly IPaymentProjection _paymentProjection;
         private readonly IRetriveBalanceOutputPort _retriveBalanceOutputPort;
 
-        public RetrieveBalance(IPaymentProjection  paymentProjection, IRetriveBalanceOutputPort  retriveBalanceOutputPort)
+        public RetrieveBalance(IPaymentProjection paymentProjection, IRetriveBalanceOutputPort retriveBalanceOutputPort)
         {
-            _paymentProjection = _paymentProjection ?? throw new ArgumentNullException(nameof(_paymentProjection));
+            _paymentProjection = paymentProjection ?? throw new ArgumentNullException(nameof(paymentProjection));
             _retriveBalanceOutputPort = retriveBalanceOutputPort ?? throw new ArgumentNullException(nameof(retriveBalanceOutputPort));
         }
 
@@ -36,6 +37,6 @@ using System.Threading.Tasks;
 
             _retriveBalanceOutputPort.OK(balanceAmount);
         }
-        
+
     }
 }

@@ -7,11 +7,13 @@ using Payment.Api.Configuration;
 using Payment.Api.Configuration.Model;
 using Payment.Api.Controllers.V1;
 using Payment.Api.Controllers.V1.RetrievePaymentDetail;
+using Payment.Api.Controllers.V1.UseCases.Wallet;
 using Payment.Application;
 using Payment.Application.Events.Handlers;
 using Payment.Application.Port;
 using Payment.Application.Projections;
 using Payment.Application.UseCases;
+using Payment.Application.UseCases.RetriveBalance;
 using Payment.Domain;
 using Payment.Domain.Events;
 using Payment.EventStore;
@@ -27,7 +29,8 @@ namespace Payment.Api
         {
             services.AddScoped<IUseCase<ProcessPaymentInput>, ProcessCardPayment>();
             services.AddScoped<IUseCase<RetrievePaymentInput>, RetrievePaymentDetail>();
-           
+            services.AddScoped<IUseCase<RetriveBalanceInput>, RetrieveBalance>();
+            
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
             services.AddScoped<IEventSourcingHandler, EventSourcing>();
@@ -47,6 +50,9 @@ namespace Payment.Api
                 builder.On<RetrievePaymentInput>().PipelineAsync()
                     .Call<IUseCase<RetrievePaymentInput>>((handler, request) => handler.Execute(request));
 
+                builder.On<RetriveBalanceInput>().PipelineAsync()
+                  .Call<IUseCase<RetriveBalanceInput>>((handler, request) => handler.Execute(request));
+
             });
 
             return services;
@@ -59,6 +65,9 @@ namespace Payment.Api
 
             services.AddScoped<ProcessPaymentPresenter, ProcessPaymentPresenter>();
             services.AddScoped<IProcessPaymentOutputPort>(x => x.GetRequiredService<ProcessPaymentPresenter>());
+
+            services.AddScoped<RetriveBalancePresenter, RetriveBalancePresenter>();
+            services.AddScoped<IRetriveBalanceOutputPort>(x => x.GetRequiredService<RetriveBalancePresenter>());
 
             return services;
         }

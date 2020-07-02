@@ -6,7 +6,6 @@ namespace Payment.Domain
 {
     public class Money : ValueObject<Money>
     {
-
         public static Money CreateNewMoneyDollars(Decimal amount)
         {
             return new Money(amount, Currency.USD);

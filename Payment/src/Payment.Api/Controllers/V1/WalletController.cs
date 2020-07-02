@@ -33,10 +33,10 @@
         /// <summary>
         /// Retrieve Payment Detail
         /// </summary>
-        /// <param name="paymentId">payment Identifier</param>
+        /// <param name="beneficiaryAlias">beneficiaryAlias</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{paymentId}")]
+        [Route("balance/{beneficiaryAlias}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RetriveBalanceOutput))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
