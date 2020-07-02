@@ -54,7 +54,7 @@ namespace Payment.EventStore
             long nextSliceStart = StreamPosition.Start;
             do
             {
-                currentSlice = await _eventSourcing.ReadStreamEventsBackwardAsync(stream, 0, 100, false)
+                currentSlice = await _eventSourcing.ReadStreamEventsForwardAsync(stream, 0, 100, false)
                                 .ConfigureAwait(false);
                 nextSliceStart = currentSlice.NextEventNumber;
                 foreach (var @event in currentSlice.Events)

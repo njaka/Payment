@@ -64,7 +64,7 @@
                                                             this.Amount.Amount,
                                                             this.Amount.Currency.ToString(),
                                                             this.Status.ToString(),
-                                                            this.Card.CardNumber.CardHint,
+                                                            this.Card.CardNumber.ToString(),
                                                             this.Card.CVV.ToString(),
                                                             this.Card.ExpirationDate.Value
                                                            )

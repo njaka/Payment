@@ -21,7 +21,7 @@ namespace Payment.Domain.Events
             //TODO: Ugly code I know how fix it, but I don't had time lol
             foreach (var domainEvent in events)
             {
-                if(domainEvent.GetType().Equals("OrderPaymentCreated"))
+                if(domainEvent.GetType().Name.Equals("OrderPaymentCreated"))
                     Raise((OrderPaymentCreated)domainEvent);
                 else
                     Raise((OrderPaymentStatusChanged)domainEvent);

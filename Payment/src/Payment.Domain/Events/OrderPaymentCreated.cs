@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Payment.Domain.Events
 {
@@ -14,7 +15,8 @@ namespace Payment.Domain.Events
             return new OrderPaymentCreated(id, beneficiaryAlias, amount, currency, status, cardNumber, cvv, expirationData);
         }
 
-        private OrderPaymentCreated(Guid id, string beneficiaryAlias, Decimal amount, string currency, string status, string cardNumber,
+        [JsonConstructor]
+        protected OrderPaymentCreated(Guid id, string beneficiaryAlias, Decimal amount, string currency, string status, string cardNumber,
             string cvv, DateTime expirationData)
         {
             Id = id;
@@ -23,7 +25,7 @@ namespace Payment.Domain.Events
             Currency = currency;
             Status = status;
             AggregateId = id;
-            CardNumber = CardNumber;
+            CardNumber = cardNumber;
             CVV = cvv;
             ExpirationDate = expirationData;
         }
