@@ -35,7 +35,7 @@ namespace Payment.Application.UseCases
         /// <summary>
         /// Payment Status
         /// </summary>
-        public byte Status { get; set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Payment Date

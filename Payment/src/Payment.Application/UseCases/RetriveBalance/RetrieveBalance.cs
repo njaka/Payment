@@ -10,12 +10,12 @@
 
     public class RetrieveBalance : IUseCase<RetriveBalanceInput>
     {
-        private readonly IPaymentProjection _paymentProjection;
+        private readonly IBalanceProjection _balanceProjection;
         private readonly IRetriveBalanceOutputPort _retriveBalanceOutputPort;
 
-        public RetrieveBalance(IPaymentProjection paymentProjection, IRetriveBalanceOutputPort retriveBalanceOutputPort)
+        public RetrieveBalance(IBalanceProjection balanceProjection, IRetriveBalanceOutputPort retriveBalanceOutputPort)
         {
-            _paymentProjection = paymentProjection ?? throw new ArgumentNullException(nameof(paymentProjection));
+            _balanceProjection = balanceProjection ?? throw new ArgumentNullException(nameof(balanceProjection));
             _retriveBalanceOutputPort = retriveBalanceOutputPort ?? throw new ArgumentNullException(nameof(retriveBalanceOutputPort));
         }
 
@@ -27,7 +27,7 @@
                 return;
             }
 
-            var balanceAmount = await _paymentProjection.GetBalanceByStreamId(input.BeneficiaryAlias);
+            var balanceAmount = await _balanceProjection.GetBalanceByStreamId(input.BeneficiaryAlias);
 
             if (balanceAmount is null)
             {

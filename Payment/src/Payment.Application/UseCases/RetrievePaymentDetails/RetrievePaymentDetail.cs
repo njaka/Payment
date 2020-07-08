@@ -1,22 +1,31 @@
 ﻿namespace Payment.Application.UseCases
 {
     using Payment.Application.Port;
+    using Payment.Application.Projections;
     using System;
     using System.Threading.Tasks;
+    using Payment.Application.UseCases;
 
     /// <summary>
     /// Retrieve Payment Detail Use Case
     /// </summary>
     public class RetrievePaymentDetail : IUseCase<RetrievePaymentInput>
     {
-        private readonly IPaymentReadRepository _paymentRepository;
+        private readonly IPaymentProjection _paymentProjection;
         private readonly IRetriePaymentOutputPort _retrievePaymentOutputPort;
 
-        public RetrievePaymentDetail(IPaymentReadRepository paymentRepository, IRetriePaymentOutputPort retrievePaymentOutputPort)
+        //public RetrievePaymentDetail(IPaymentReadRepository paymentRepository, IRetriePaymentOutputPort retrievePaymentOutputPort)
+        //{
+        //    _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+        //    _retrievePaymentOutputPort = retrievePaymentOutputPort ?? throw new ArgumentNullException(nameof(retrievePaymentOutputPort));
+        //}
+
+        public RetrievePaymentDetail(IPaymentProjection paymentProjection, IRetriePaymentOutputPort retrievePaymentOutputPort)
         {
-            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
+            _paymentProjection = paymentProjection ?? throw new ArgumentNullException(nameof(paymentProjection));
             _retrievePaymentOutputPort = retrievePaymentOutputPort ?? throw new ArgumentNullException(nameof(retrievePaymentOutputPort));
         }
+
 
         public async Task Execute(RetrievePaymentInput input)
         {
@@ -26,7 +35,7 @@
                 return;
             }
 
-            var paymentDetail = await _paymentRepository.GetPaymenDetailById(input.PaymentId);
+            var paymentDetail = await _paymentProjection.GetById(input.PaymentId.Value);
 
             if (paymentDetail is null)
             {
@@ -34,7 +43,12 @@
                 return;
             }
 
-            _retrievePaymentOutputPort.OK(paymentDetail);
+            _retrievePaymentOutputPort.OK(
+                                            paymentDetail
+                                                    .ConvertFromPaymentModelToPaymentDto()
+                                          );
         }
+
+        
     }
 }

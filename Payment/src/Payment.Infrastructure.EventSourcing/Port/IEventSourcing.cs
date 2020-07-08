@@ -12,6 +12,10 @@ namespace Payment.Infrastructure.EventSourcing
         Task AppendEventOnStreamAsync<T>(T @event, string stream) where T : Event;
         Task ReadStreamEventsForward(string stream, StreamMessageReceived streamMessageReceived );
 
+        Task SubscribeToAllAsync(StreamMessageReceived streamMessageReceived);
+
+        Task ReadAllEventsForward(StreamMessageReceived streamMessageReceived);
+
         public delegate Task StreamMessageReceived(EventResponse streamMessage);
     }
 }

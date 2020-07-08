@@ -34,7 +34,9 @@ namespace Payment.Api
             services.AddScoped<IBankService, BankService>();
             services.AddScoped<IBankClient, BankClient>();
             services.AddScoped<IEventSourcingHandler, EventSourcing>();
+            services.AddScoped<IBalanceProjection, BalanceProjection>();
             services.AddScoped<IPaymentProjection, PaymentProjection>();
+            
             services.AddSingleton<IEventSourcing, EventStore.EventStore>();
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
             services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));
