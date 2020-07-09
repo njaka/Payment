@@ -5,7 +5,7 @@ using Payment.Domain;
 
 namespace Payment.Application.Projections
 {
-    public interface IPaymentProjection
+    public interface IBalanceProjection
     {
         Task<RetriveBalanceOutput> GetBalanceByStreamId(string streamId);
     }

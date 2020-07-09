@@ -1,10 +1,5 @@
 ﻿namespace Payment.Application.Projections
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using LiquidProjections;
     using Newtonsoft.Json;
     using Payment.Application.UseCases;
@@ -13,58 +8,61 @@
     using Payment.Domain.Events.Core;
     using Payment.Domain.Wallet;
     using Payment.Infrastructure.EventSourcing;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
     using PaymentModel = Payment.Domain.Payment;
 
-    public class PaymentProjection : IPaymentProjection
+    public class BalanceProjection : IBalanceProjection
     {
         private static readonly string STREAMNAME = "wallet-";
 
-        private readonly IEventMap<Dictionary<Guid, PaymentModel>> _map;
+        private readonly IEventMap<Balance> _map;
 
-        private Dictionary<Guid, PaymentModel> _events;
+        private readonly Dictionary<Guid, PaymentModel> _events;
 
         private readonly IEventSourcing _eventSourcing;
+        public Balance Balance { get; protected set; }
 
-
-        public async Task<PaymentModel> GetById(Guid paymentId)
+        public async Task<RetriveBalanceOutput> GetBalanceByStreamId(string streamId)
         {
-            _events = new Dictionary<Guid, PaymentModel>();
-            await _eventSourcing.ReadAllEventsForward(StreamMessageReceived);
+            Balance = Balance.CreateNewBalance(Money.CreateNewMoneyDollars(0), DateTime.UtcNow);
+            await _eventSourcing.ReadStreamEventsForward($"{STREAMNAME}{streamId}", StreamMessageReceived);
 
-            return _events[paymentId];
+            return new RetriveBalanceOutput()
+            {
+                Amount = Balance.Amount.Amount,
+                Currency = Balance.Amount.Currency.ToString()
+            };
         }
-    
 
-        public PaymentProjection(IEventSourcing eventSourcing)
+        public BalanceProjection(IEventSourcing eventSourcing)
         {
             _eventSourcing = eventSourcing;
             _events = new Dictionary<Guid, PaymentModel>();
 
-            _map = CreatePaymentEventMap()
+            _map = CreateBalanceEventMap()
                             .BuildBalanceMap();
         }
 
 
 
-        private EventMapBuilder<Dictionary<Guid, PaymentModel>> CreatePaymentEventMap()
+        private EventMapBuilder<Balance> CreateBalanceEventMap()
         {
-            var mapBuilder = new EventMapBuilder<Dictionary<Guid, PaymentModel>>();
-            mapBuilder.Map<OrderPaymentCreated>().As((OrderPayment, events) =>
-            {
-                CreatePayment(OrderPayment);
-            });
+            var mapBuilder = new EventMapBuilder<Balance>();
 
-            mapBuilder.Map<OrderPaymentPaid>().As((OrderPayment, events) =>
+            mapBuilder.Map<OrderPaymentPaid>().As((OrderPayment, balance) =>
             {
-                UpdateStatus(OrderPayment);
+                AddBalance(OrderPayment, balance);
 
             });
             return mapBuilder;
         }
 
-        private void UpdateStatus(OrderPaymentPaid OrderPayment)
+        private void AddBalance(OrderPaymentPaid orderPayment, Balance balance)
         {
-            _events[OrderPayment.AggregateId].Paid();
+            Balance = balance.Add(Money.CreateNewMoney(orderPayment.Amount, orderPayment.Currency)).Value;
         }
 
         private void CreatePayment(OrderPaymentCreated OrderPayment)
@@ -86,8 +84,7 @@
         private Task StreamMessageReceived(EventResponse streamMessage)
         {
             var @event = DeserializeJsonEvent(streamMessage);
-            
-            _map.Handle(@event, _events);
+            _map.Handle(@event, Balance);
             return Task.CompletedTask;
         }
 
@@ -100,7 +97,7 @@
                 case "OrderPaymentStatusChanged":
                     return JsonConvert.DeserializeObject<OrderPaymentPaid>(Encoding.ASCII.GetString(streamMessage.Data));
                 default:
-                    return null;
+                    throw new InvalidOperationException("Unknown event type.");
             }
         }
     }

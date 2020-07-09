@@ -25,14 +25,16 @@
             return new Payment(card, amount, beneficiaryAlias);
         }
 
-        public Payment UpdateStatus(PaymentStatus status)
+        public Payment Paid()
         {
-            this.Status = status;
+            this.Status = PaymentStatus.Succeed;
 
             RegisterEvent(
-                            OrderPaymentStatusChanged
-                                    .CreateNewOrderPaymentStatusChanged(
+                            OrderPaymentPaid
+                                    .CreateNewOrderPaymentPaid(
                                                             this.PaymentId.Value,
+                                                            this.Amount.Amount,
+                                                            this.Amount.Currency.ToString(),
                                                             this.Status.ToString(),
                                                             this.BeneficiaryAlias
                                                            )

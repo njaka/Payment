@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 namespace Payment.Application.Events.Handlers
 {
     public class OrderPaymentEventHandler : INotificationHandler<OrderPaymentCreated>,
-                                            INotificationHandler<OrderPaymentStatusChanged>
+                                            INotificationHandler<OrderPaymentPaid>
     {
-        private static readonly string STREAMNAME = "Wallet-"; 
+        private static readonly string STREAMNAME = "wallet-"; 
 
         private readonly IEventSourcingHandler _eventSourcing;
 
@@ -26,7 +26,7 @@ namespace Payment.Application.Events.Handlers
             await _eventSourcing.RaiseEventAsync(notification, $"{STREAMNAME}{notification.BeneficiaryAlias}");
         }
 
-        public async Task Handle(OrderPaymentStatusChanged notification, CancellationToken cancellationToken)
+        public async Task Handle(OrderPaymentPaid notification, CancellationToken cancellationToken)
         {
             // Talk with NJaka about stream name 
             await _eventSourcing.RaiseEventAsync(notification, $"{STREAMNAME}{notification.BeneficiaryAlias}");

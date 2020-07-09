@@ -29,6 +29,7 @@ namespace Payment.EventStore
             await _eventSourcing.AppendToStreamAsync(stream, ExpectedVersion.Any, BuildEventData(@event)).ConfigureAwait(false);
         }
 
+
         private static EventData BuildEventData<T>(T @event) where T : Event
         {
             return new EventData(
@@ -48,13 +49,11 @@ namespace Payment.EventStore
 
         public async Task ReadStreamEventsForward(string stream, StreamMessageReceived streamMessageReceived)
         {
-            var events = new List<EventResponse>();
-
             StreamEventsSlice currentSlice = null;
             long nextSliceStart = StreamPosition.Start;
             do
             {
-                currentSlice = await _eventSourcing.ReadStreamEventsForwardAsync(stream, 0, 100, false)
+                currentSlice = await _eventSourcing.ReadStreamEventsForwardAsync(stream, nextSliceStart, 100, false)
                                 .ConfigureAwait(false);
                 nextSliceStart = currentSlice.NextEventNumber;
                 foreach (var @event in currentSlice.Events)
@@ -69,6 +68,38 @@ namespace Payment.EventStore
                 }
 
             } while (!currentSlice.IsEndOfStream);
+        }
+
+        
+        public async Task ReadAllEventsForward(StreamMessageReceived streamMessageReceived)
+        {
+            AllEventsSlice currentSlice;
+            var nextSliceStart = Position.Start;
+            do
+            {
+                currentSlice = await _eventSourcing.ReadAllEventsForwardAsync(nextSliceStart, 100, false)
+                                .ConfigureAwait(false);
+
+                nextSliceStart = currentSlice.NextPosition;
+
+                foreach (var @event in currentSlice.Events)
+                {
+                    await streamMessageReceived(new EventResponse(
+                                                    @event.Event.EventStreamId,
+                                                    @event.Event.EventId,
+                                                    @event.Event.EventNumber,
+                                                    @event.Event.EventType,
+                                                    @event.Event.Data
+                                                ));
+                }
+
+            } while (!currentSlice.IsEndOfStream);
+        }
+
+        public async Task SubscribeToAllAsync(StreamMessageReceived streamMessageReceived)
+        {
+            // TODO: CARLOS
+            await Task.FromResult(true);
         }
     }
 }

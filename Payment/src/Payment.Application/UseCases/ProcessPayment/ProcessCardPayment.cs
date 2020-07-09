@@ -45,9 +45,13 @@
                                         .SubmitCardPaymentAsync(payment)
                                         .ConfigureAwait(false);
 
-            payment
-                .UpdateStatus(bankResult.PaymentStatus)
-                .RaiseEvents();
+            if (bankResult.PaymentStatus.Equals(PaymentStatus.Succeed))
+            {
+                payment
+                    .Paid()
+                    .RaiseEvents();
+            }
+            
 
             _paymentOutputPort.OK(bankResult.BuildOutput());
         }
