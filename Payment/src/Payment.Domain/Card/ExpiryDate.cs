@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Payment.Domain
 {
-    public class ExpiryDate:ValueObject
+    public class ExpiryDate : ValueObject<ExpiryDate>
     {
         private readonly DateTime _value;
 
@@ -35,6 +36,11 @@ namespace Payment.Domain
 
         }
         public override string ToString() => _value.ToString();
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
 
         public  DateTime Value => _value;
     }

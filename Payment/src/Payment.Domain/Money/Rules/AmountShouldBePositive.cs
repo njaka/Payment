@@ -15,7 +15,7 @@ namespace Payment.Domain
 
         public bool IsBroken()
         {
-            return (!(_value > 0));
+            return (!(_value >= 0));
         }
     }
 }

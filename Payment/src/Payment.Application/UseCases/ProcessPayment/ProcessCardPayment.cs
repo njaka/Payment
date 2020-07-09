@@ -1,8 +1,13 @@
 ﻿namespace Payment.Application.UseCases
 {
+    using CSharpFunctionalExtensions;
+    using MediatR;
     using Payment.Application.Port;
     using Payment.Domain;
+    using Payment.Domain.Events;
+    using Payment.Domain.Wallet;
     using System;
+    using System.Net.Http.Headers;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -10,13 +15,11 @@
     /// </summary>
     public class ProcessCardPayment : IUseCase<ProcessPaymentInput>
     {
-        private readonly IPaymentWriteRepository _paymentRepository;
         private readonly IProcessPaymentOutputPort _paymentOutputPort;
         private readonly IBankService _bankService;
 
-        public ProcessCardPayment(IPaymentWriteRepository paymentRepository, IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
+        public ProcessCardPayment(IProcessPaymentOutputPort paymentOutputPort, IBankService bankService)
         {
-            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             _bankService = bankService ?? throw new ArgumentNullException(nameof(bankService));
             _paymentOutputPort = paymentOutputPort ?? throw new ArgumentNullException(nameof(paymentOutputPort));
         }
@@ -28,27 +31,29 @@
                 _paymentOutputPort.BadRequest("input is null");
                 return;
             }
+            
+            Payment payment = Payment
+                            .CreateNewCardPayment
+                            (
+                                input.Card, 
+                                input.Amount, 
+                                input.BeneficiaryAlias
+                            )
+                            .RaiseEvents();
 
+            BankResult bankResult = await _bankService
+                                        .SubmitCardPaymentAsync(payment)
+                                        .ConfigureAwait(false);
 
-            var payment = Payment.CreateNewCardPayment(input.Card, input.Amount, input.BeneficiaryAlias);
-
-            await _paymentRepository.AddPaymentAsync(payment).ConfigureAwait(false);
-
-            var bankResult = await _bankService.SubmitCardPaymentAsync(payment).ConfigureAwait(false);
-
-            await _paymentRepository.UpdatePaymentStatusAsync(bankResult.PaymentId, bankResult.PaymentStatus).ConfigureAwait(false);
-
-            _paymentOutputPort.OK(BuildOutput(bankResult));
-        }
-
-
-        private ProcessPaymentOutput BuildOutput(BankResult bankResult)
-        {
-            return new ProcessPaymentOutput()
+            if (bankResult.PaymentStatus.Equals(PaymentStatus.Succeed))
             {
-                PaymentId = bankResult.PaymentId,
-                PaymentStatus = bankResult.PaymentStatus
-            };
+                payment
+                    .Paid()
+                    .RaiseEvents();
+            }
+            
+
+            _paymentOutputPort.OK(bankResult.BuildOutput());
         }
     }
 }

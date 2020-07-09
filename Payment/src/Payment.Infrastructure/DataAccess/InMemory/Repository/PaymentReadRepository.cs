@@ -45,7 +45,7 @@
                 Amount = p.Amount,
                 Currency = ((Currency)p.Currency).ToString() ,
                 BeneficiaryAlias = p.BeneficiaryAlias,
-                Status = p.Status,
+                Status = p.Status.ToString(),
                 PaymentDate =p.CreateDate,
 
             };

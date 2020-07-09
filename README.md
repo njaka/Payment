@@ -1,6 +1,6 @@
 
 ## Required
-- ASP.NET Core 3.1
+- .NET 5
 
 ## Assumptions:
 
@@ -56,6 +56,19 @@ e.g payment details
   "paymentDate": "2020-06-18T00:05:20.0491589+02:00"
 }
 ```
+
+## Event Store
+
+Download (EventStoreDB 5.0.8)
+
+https://eventstore.com/downloads/
+
+Extract and using command run the command above to Start
+
+```
+EventStore.ClusterNode.exe --db ./db --log ./logs
+```
+
 ## Containerization
 
 Build image 
@@ -92,6 +105,7 @@ Access: http://localhost:5053/index.html
 
 - FluentMediator for handling events (https://github.com/ivanpaulovich/FluentMediator)
 - Metrics using prometheus
+- Event Store to EventSourcing (https://eventstore.com/downloads/)
 - InMemory Database
 - Native .Net Core DI
 - Api documentation with Swagger

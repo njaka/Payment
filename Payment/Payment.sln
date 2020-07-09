@@ -19,6 +19,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{45576D02-420A-4726-B505-0A505BA2AB16}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.EventStore", "src\Payment.EventStore\Payment.EventStore.csproj", "{73A95100-55F2-420A-A5A6-32A8F6732B3F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.Infrastructure.EventSourcing", "src\Payment.Infrastructure.EventSourcing\Payment.Infrastructure.EventSourcing.csproj", "{442AE047-41DF-4DD9-908D-6EA003C9A775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{3B05FCF2-8B91-4364-8FFC-C90B29440CCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B05FCF2-8B91-4364-8FFC-C90B29440CCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B05FCF2-8B91-4364-8FFC-C90B29440CCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73A95100-55F2-420A-A5A6-32A8F6732B3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73A95100-55F2-420A-A5A6-32A8F6732B3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73A95100-55F2-420A-A5A6-32A8F6732B3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73A95100-55F2-420A-A5A6-32A8F6732B3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{442AE047-41DF-4DD9-908D-6EA003C9A775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{442AE047-41DF-4DD9-908D-6EA003C9A775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{442AE047-41DF-4DD9-908D-6EA003C9A775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{442AE047-41DF-4DD9-908D-6EA003C9A775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,6 +66,8 @@ Global
 		{4A88DAD8-0751-4805-AF91-D6A42DFA0467} = {45576D02-420A-4726-B505-0A505BA2AB16}
 		{47A77153-E809-435C-9D2E-463B5939C120} = {263C26E7-D5A3-4C59-9188-9E4B306303B3}
 		{3B05FCF2-8B91-4364-8FFC-C90B29440CCA} = {25DBCBDE-8ECF-48A3-948E-9CE9A98312AF}
+		{73A95100-55F2-420A-A5A6-32A8F6732B3F} = {25DBCBDE-8ECF-48A3-948E-9CE9A98312AF}
+		{442AE047-41DF-4DD9-908D-6EA003C9A775} = {263C26E7-D5A3-4C59-9188-9E4B306303B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BFAC6647-1121-4436-B889-E11116B16B8A}
