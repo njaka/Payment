@@ -24,7 +24,7 @@ namespace Payment.Domain.Events
                 if(domainEvent.GetType().Name.Equals("OrderPaymentCreated"))
                     Raise((OrderPaymentCreated)domainEvent);
                 else
-                    Raise((OrderPaymentStatusChanged)domainEvent);
+                    Raise((OrderPaymentPaid)domainEvent);
             }
         }
 

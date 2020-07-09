@@ -51,12 +51,8 @@
         private EventMapBuilder<Balance> CreateBalanceEventMap()
         {
             var mapBuilder = new EventMapBuilder<Balance>();
-            mapBuilder.Map<OrderPaymentCreated>().As((OrderPayment, balance) =>
-            {
-                CreatePayment(OrderPayment);
-            });
 
-            mapBuilder.Map<OrderPaymentStatusChanged>().As((OrderPayment, balance) =>
+            mapBuilder.Map<OrderPaymentPaid>().As((OrderPayment, balance) =>
             {
                 AddBalance(OrderPayment, balance);
 
@@ -64,11 +60,9 @@
             return mapBuilder;
         }
 
-        private void AddBalance(OrderPaymentStatusChanged OrderPayment, Balance balance)
+        private void AddBalance(OrderPaymentPaid orderPayment, Balance balance)
         {
-            _events[OrderPayment.AggregateId].UpdateStatus(OrderPayment.PaymentStatus.ToEnum<PaymentStatus>());
-            if (_events[OrderPayment.AggregateId].Status == PaymentStatus.Succeed)
-                Balance = balance.Add(_events[OrderPayment.AggregateId].Amount).Value;
+            Balance = balance.Add(Money.CreateNewMoney(orderPayment.Amount, orderPayment.Currency)).Value;
         }
 
         private void CreatePayment(OrderPaymentCreated OrderPayment)
@@ -101,7 +95,7 @@
                 case "OrderPaymentCreated":
                     return JsonConvert.DeserializeObject<OrderPaymentCreated>(Encoding.ASCII.GetString(streamMessage.Data));
                 case "OrderPaymentStatusChanged":
-                    return JsonConvert.DeserializeObject<OrderPaymentStatusChanged>(Encoding.ASCII.GetString(streamMessage.Data));
+                    return JsonConvert.DeserializeObject<OrderPaymentPaid>(Encoding.ASCII.GetString(streamMessage.Data));
                 default:
                     throw new InvalidOperationException("Unknown event type.");
             }

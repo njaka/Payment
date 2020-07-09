@@ -54,7 +54,7 @@
                 CreatePayment(OrderPayment);
             });
 
-            mapBuilder.Map<OrderPaymentStatusChanged>().As((OrderPayment, events) =>
+            mapBuilder.Map<OrderPaymentPaid>().As((OrderPayment, events) =>
             {
                 UpdateStatus(OrderPayment);
 
@@ -62,9 +62,9 @@
             return mapBuilder;
         }
 
-        private void UpdateStatus(OrderPaymentStatusChanged OrderPayment)
+        private void UpdateStatus(OrderPaymentPaid OrderPayment)
         {
-            _events[OrderPayment.AggregateId].UpdateStatus(OrderPayment.PaymentStatus.ToEnum<PaymentStatus>());
+            _events[OrderPayment.AggregateId].Paid();
         }
 
         private void CreatePayment(OrderPaymentCreated OrderPayment)
@@ -98,7 +98,7 @@
                 case "OrderPaymentCreated":
                     return JsonConvert.DeserializeObject<OrderPaymentCreated>(Encoding.ASCII.GetString(streamMessage.Data));
                 case "OrderPaymentStatusChanged":
-                    return JsonConvert.DeserializeObject<OrderPaymentStatusChanged>(Encoding.ASCII.GetString(streamMessage.Data));
+                    return JsonConvert.DeserializeObject<OrderPaymentPaid>(Encoding.ASCII.GetString(streamMessage.Data));
                 default:
                     return null;
             }

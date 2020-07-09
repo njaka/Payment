@@ -41,7 +41,7 @@ namespace Payment.Api
             services.AddScoped<IBankHttpClientFactory, BankHttpClientFactory>();
             services.AddSingleton<IEventStoreConnection>(EventStoreConnection.Create(new Uri(eventSourcingConfigurationModel.ConnectionString)));
             services.AddScoped<INotificationHandler<OrderPaymentCreated>, OrderPaymentEventHandler>();
-            services.AddScoped<INotificationHandler<OrderPaymentStatusChanged>, OrderPaymentEventHandler>();
+            services.AddScoped<INotificationHandler<OrderPaymentPaid>, OrderPaymentEventHandler>();
 
             services.AddFluentMediator(
             builder =>
