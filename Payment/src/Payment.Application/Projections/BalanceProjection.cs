@@ -4,6 +4,7 @@
     using Newtonsoft.Json;
     using Payment.Application.UseCases;
     using Payment.Domain;
+    using Payment.Domain.DomainServices;
     using Payment.Domain.Events;
     using Payment.Domain.Events.Core;
     using Payment.Domain.Wallet;
@@ -27,7 +28,7 @@
 
         public async Task<RetriveBalanceOutput> GetBalanceByStreamId(string streamId)
         {
-            Balance = Balance.CreateNewBalance(Money.CreateNewMoneyDollars(0), DateTime.UtcNow);
+            Balance = Balance.CreateNewBalance(Money.FromDecimal(0, "USD", new CurrencyLookup()), DateTime.UtcNow);
             await _eventSourcing.ReadStreamEventsForward($"{STREAMNAME}{streamId}", StreamMessageReceived);
 
             return new RetriveBalanceOutput()
@@ -62,7 +63,7 @@
 
         private void AddBalance(OrderPaymentPaid orderPayment, Balance balance)
         {
-            Balance = balance.Add(Money.CreateNewMoney(orderPayment.Amount, orderPayment.Currency)).Value;
+            Balance = balance.Add(Money.FromDecimal(orderPayment.Amount, orderPayment.Currency, new CurrencyLookup())).Value;
         }
 
         private void CreatePayment(OrderPaymentCreated OrderPayment)
@@ -75,7 +76,7 @@
                                            new Card(new CardNumber(OrderPayment.CardNumber),
                                            new ExpiryDate("06/22"),
                                            new CVV(OrderPayment.CVV)),
-                                           new Money(OrderPayment.Amount, OrderPayment.Currency), OrderPayment.BeneficiaryAlias
+                                           Money.FromDecimal(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
                                         );
 
             _events[OrderPayment.AggregateId] = payment;

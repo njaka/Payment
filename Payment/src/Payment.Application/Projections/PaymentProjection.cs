@@ -9,6 +9,7 @@
     using Newtonsoft.Json;
     using Payment.Application.UseCases;
     using Payment.Domain;
+    using Payment.Domain.DomainServices;
     using Payment.Domain.Events;
     using Payment.Domain.Events.Core;
     using Payment.Domain.Wallet;
@@ -77,7 +78,7 @@
                                            new Card(new CardNumber(OrderPayment.CardNumber),
                                            new ExpiryDate("06/22"),
                                            new CVV(OrderPayment.CVV)),
-                                           new Money(OrderPayment.Amount, OrderPayment.Currency), OrderPayment.BeneficiaryAlias
+                                           Money.FromDecimal(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
                                         );
 
             _events[OrderPayment.AggregateId] = payment;

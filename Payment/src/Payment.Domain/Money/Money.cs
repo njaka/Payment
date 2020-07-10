@@ -6,26 +6,22 @@ namespace Payment.Domain
 {
     public class Money : ValueObject<Money>
     {
-        public static Money CreateNewMoneyDollars(Decimal amount)
-        {
-            return new Money(amount, Currency.USD);
-        }
 
-        public static Money CreateNewMoney(Decimal amount, string currency)
+        protected Money(Decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
         {
-            return new Money(amount, currency);
-        }
-
-        public Money(Decimal amount, string currency)
-        {
+            this.CheckRule(new CurrencyShouldBeSpecified(currencyCode));
             this.CheckRule(new AmountShouldBePositive(amount));
-            this.CheckRule(new CurrencyShouldEuroOrDollarOrPound(currency));
 
+            var currency = currencyLookup.FindCurrency(currencyCode);
+
+            this.CheckRule(new CurrencySouldBeInUse(currencyCode, currency.InUse));
+            this.CheckRule(new AmountShouldBeDecimalPlacesLessThanCurrencypublic(amount, currency.DecimalPlaces, currencyCode));
+            
             this.Amount = amount;
-            this.Currency = (Currency)Enum.Parse(typeof(Currency), currency);
+            this.Currency = currency;
         }
 
-        public Money(Decimal amount, Currency currency)
+        protected Money(Decimal amount, Currency currency)
         {
             this.CheckRule(new AmountShouldBePositive(amount));
 
@@ -49,10 +45,24 @@ namespace Payment.Domain
             return Result.Ok(new Money(Amount - moneyAdd.Amount, Currency));
         }
 
+        public static Money FromDecimal(
+            decimal amount,
+            string currency,
+            ICurrencyLookup currencyLookup)
+            => new Money(amount, currency, currencyLookup);
+
+        public static Money FromString(
+            string amount,
+            string currency,
+            ICurrencyLookup currencyLookup)
+            => new Money(decimal.Parse(amount), currency, currencyLookup);
+
+        public static Money operator +(Money summand1, Money summand2) => summand1.Add(summand2).Value;
+
+        public static Money operator -(Money minuend, Money subtrahend) => minuend.Subtract(subtrahend).Value;
+
         public decimal ToDecimal()
-        {
-            return Amount;
-        }
+         => Amount;
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

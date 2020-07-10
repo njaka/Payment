@@ -9,6 +9,7 @@ namespace Payment.Api.Controllers.V1
     using Payment.Api.Controllers.V1.RetrievePaymentDetail;
     using Payment.Application.UseCases;
     using Payment.Domain;
+    using Payment.Domain.DomainServices;
     using System;
     using System.Threading.Tasks;
 
@@ -84,7 +85,7 @@ namespace Payment.Api.Controllers.V1
                         new CVV(request.Card.CVV)),
 
 
-                Amount = new Money(request.Amount, request.Currency),
+                Amount = Money.FromDecimal(request.Amount, request.Currency, new CurrencyLookup()),
                 BeneficiaryAlias = request.BeneficiaryAlias
             };
 

@@ -1,9 +1,24 @@
 ﻿namespace Payment.Domain
 {
-    public enum Currency
+    using System.Collections.Generic;
+
+    public interface ICurrencyLookup
     {
-        EU = 1,
-        USD = 2,
-        POUND = 3,
+        Currency FindCurrency(string currencyCode);
+    }
+    public class Currency : ValueObject<Currency>
+    {
+        public string CurrencyCode { get; set; }
+        public bool InUse { get; set; }
+        public int DecimalPlaces { get; set; }
+
+        public static Currency None = new Currency { InUse = false };
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return CurrencyCode;
+            yield return InUse;
+            yield return DecimalPlaces;
+        }
     }
 }
