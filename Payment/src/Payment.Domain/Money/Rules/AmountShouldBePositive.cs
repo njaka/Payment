@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Payment.Domain
+﻿namespace Payment.Domain
 {
+    using System;
+
     public class AmountShouldBePositive : IValidationRule
     {
         private readonly Decimal _value;

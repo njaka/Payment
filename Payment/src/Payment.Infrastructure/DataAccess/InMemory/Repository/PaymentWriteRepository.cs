@@ -38,7 +38,7 @@
                 Id = PaymentEntityNextIndex,
                 PaymentId = payment.PaymentId.ToGuid(),
                 Amount = payment.Amount.ToDecimal(),
-                Currency = (byte) payment.Amount.Currency,
+                Currency = payment.Amount.Currency.CurrencyCode,
                 CreateDate=payment.CreatedOn,
                 BeneficiaryAlias = payment.BeneficiaryAlias,
                 Status=(byte) payment.Status,

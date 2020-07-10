@@ -43,7 +43,7 @@
                     CVV = p.Card.CVV
                 },
                 Amount = p.Amount,
-                Currency = ((Currency)p.Currency).ToString() ,
+                Currency = p.Currency.ToString() ,
                 BeneficiaryAlias = p.BeneficiaryAlias,
                 Status = p.Status.ToString(),
                 PaymentDate =p.CreateDate,

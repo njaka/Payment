@@ -11,7 +11,7 @@ namespace Payment.Infrastructure.DataAccess.InMemory
 
         public decimal Amount { get; set; }
 
-        public byte Currency { get; set; }
+        public string Currency { get; set; }
 
         public string BeneficiaryAlias { get; set; }
 
