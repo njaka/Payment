@@ -28,7 +28,7 @@
 
         public async Task<RetriveBalanceOutput> GetBalanceByStreamId(string streamId)
         {
-            Balance = Balance.CreateNewBalance(new Money(0, "USD", new CurrencyLookup()), DateTime.UtcNow);
+            Balance = Balance.CreateNewBalance(Money.FromDecimal(0, "USD", new CurrencyLookup()), DateTime.UtcNow);
             await _eventSourcing.ReadStreamEventsForward($"{STREAMNAME}{streamId}", StreamMessageReceived);
 
             return new RetriveBalanceOutput()
@@ -63,7 +63,7 @@
 
         private void AddBalance(OrderPaymentPaid orderPayment, Balance balance)
         {
-            Balance = balance.Add(new Money(orderPayment.Amount, orderPayment.Currency, new CurrencyLookup())).Value;
+            Balance = balance.Add(Money.FromDecimal(orderPayment.Amount, orderPayment.Currency, new CurrencyLookup())).Value;
         }
 
         private void CreatePayment(OrderPaymentCreated OrderPayment)
@@ -76,7 +76,7 @@
                                            new Card(new CardNumber(OrderPayment.CardNumber),
                                            new ExpiryDate("06/22"),
                                            new CVV(OrderPayment.CVV)),
-                                           new Money(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
+                                           Money.FromDecimal(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
                                         );
 
             _events[OrderPayment.AggregateId] = payment;

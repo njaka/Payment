@@ -21,7 +21,7 @@
 
         public bool IsBroken()
         {
-            return (!(decimal.Round(_value, _decimalPlaces) != _value));
+            return ((decimal.Round(_value, _decimalPlaces) != _value));
         }
     }
 }
