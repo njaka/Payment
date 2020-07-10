@@ -9,7 +9,7 @@ namespace Payment.Domain
         {
             if (rule.IsBroken())
             {
-                //throw new ValueObjectException(rule);
+                throw new ValueObjectException(rule);
             }
         }
 

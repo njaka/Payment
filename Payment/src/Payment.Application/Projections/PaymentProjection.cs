@@ -78,7 +78,7 @@
                                            new Card(new CardNumber(OrderPayment.CardNumber),
                                            new ExpiryDate("06/22"),
                                            new CVV(OrderPayment.CVV)),
-                                           new Money(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
+                                           Money.FromDecimal(OrderPayment.Amount, OrderPayment.Currency, new CurrencyLookup()), OrderPayment.BeneficiaryAlias
                                         );
 
             _events[OrderPayment.AggregateId] = payment;

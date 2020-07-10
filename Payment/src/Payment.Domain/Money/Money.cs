@@ -7,7 +7,7 @@ namespace Payment.Domain
     public class Money : ValueObject<Money>
     {
 
-        public Money(Decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
+        protected Money(Decimal amount, string currencyCode, ICurrencyLookup currencyLookup)
         {
             this.CheckRule(new CurrencyShouldBeSpecified(currencyCode));
             this.CheckRule(new AmountShouldBePositive(amount));
@@ -51,10 +51,18 @@ namespace Payment.Domain
             ICurrencyLookup currencyLookup)
             => new Money(amount, currency, currencyLookup);
 
+        public static Money FromString(
+            string amount,
+            string currency,
+            ICurrencyLookup currencyLookup)
+            => new Money(decimal.Parse(amount), currency, currencyLookup);
+
+        public static Money operator +(Money summand1, Money summand2) => summand1.Add(summand2).Value;
+
+        public static Money operator -(Money minuend, Money subtrahend) => minuend.Subtract(subtrahend).Value;
+
         public decimal ToDecimal()
-        {
-            return Amount;
-        }
+         => Amount;
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

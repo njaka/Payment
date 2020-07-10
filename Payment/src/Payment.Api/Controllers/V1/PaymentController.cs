@@ -85,7 +85,7 @@ namespace Payment.Api.Controllers.V1
                         new CVV(request.Card.CVV)),
 
 
-                Amount = new Money(request.Amount, request.Currency, new CurrencyLookup()),
+                Amount = Money.FromDecimal(request.Amount, request.Currency, new CurrencyLookup()),
                 BeneficiaryAlias = request.BeneficiaryAlias
             };
 

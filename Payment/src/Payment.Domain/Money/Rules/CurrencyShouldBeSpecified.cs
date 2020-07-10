@@ -13,7 +13,7 @@
 
         public bool IsBroken()
         {
-            return (!string.IsNullOrEmpty(_value));
+            return (string.IsNullOrEmpty(_value));
         }
     }
 }

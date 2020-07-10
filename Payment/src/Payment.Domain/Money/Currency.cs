@@ -16,7 +16,9 @@
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            throw new System.NotImplementedException();
+            yield return CurrencyCode;
+            yield return InUse;
+            yield return DecimalPlaces;
         }
     }
 }
