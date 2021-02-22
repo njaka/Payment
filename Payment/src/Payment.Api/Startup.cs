@@ -30,13 +30,13 @@ namespace Payment.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddGrpc();
             services.AddControllers();
             services.AddHealthChecks();
             services.AddRouting(o => o.LowercaseUrls = true);
             services.AddApiVersioning(Configuration.GetVersioningConfiguration());
             services.AddSwagger(Configuration.GetSwaggerConfiguration());
             services.AddHttpExceptionFilter();
-
             services.AddPaymentApplication(Configuration.GetEventSourcingConfigurarionModel());
             services.AddPaymentPresenterV1();
             services.AddInMemoryDatabase();
@@ -58,9 +58,11 @@ namespace Payment.Api
             appBuilder.UseRouting();
             appBuilder.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<PaymentServices>();
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("health");
             });
+
             appBuilder.ConfigureSwagger(Configuration.GetSwaggerConfiguration());
         }
     }
